@@ -99,6 +99,7 @@
 127.0.0.1 a19537.actonservice.com
 127.0.0.1 a19609.actonservice.com
 127.0.0.1 a19612.actonservice.com
+127.0.0.1 a1.api.bbc.co.uk
 127.0.0.1 a22037.actonservice.com
 127.0.0.1 a22368.actonservice.com
 127.0.0.1 a24273.actonservice.com
@@ -624,11 +625,13 @@
 127.0.0.1 aragonresearch.actonservice.com
 127.0.0.1 argyleforum.actonservice.com
 127.0.0.1 arrayasolutions.actonservice.com
+127.0.0.1 arstechnica.com
 127.0.0.1 articles.latimes.com
 127.0.0.1 ascassociation.actonservice.com
 127.0.0.1 ascentcrm.actonservice.com
 127.0.0.1 ask.com
 127.0.0.1 ask.fm
+127.0.0.1 askubuntu.com
 127.0.0.1 astm.org
 127.0.0.1 astromed.actonservice.com
 127.0.0.1 atbs.actonservice.com
@@ -656,6 +659,8 @@
 127.0.0.1 baremetrics.com
 127.0.0.1 bashupload.com
 127.0.0.1 bat.bing.com
+127.0.0.1 bbc.com
+127.0.0.1 bbc.co.uk
 127.0.0.1 bcp.crwdcntrl.net
 127.0.0.1 beacon.deepintent.com
 127.0.0.1 beacon.krxd.net
@@ -864,6 +869,9 @@
 127.0.0.1 forum.xfce.org
 127.0.0.1 foursquare.com
 127.0.0.1 fox4kc.com
+127.0.0.1 fpa-api.arstechnica.com
+127.0.0.1 fpa-cdn.arstechnica.com
+127.0.0.1 fpa-events.arstechnica.com
 127.0.0.1 franklin-stp-sussex.apply.leadershipacademy.nhs.uk
 127.0.0.1 free.fr
 127.0.0.1 fullaventura.com
@@ -872,6 +880,7 @@
 127.0.0.1 gaywoodhousesurgery.nhs.uk
 127.0.0.1 g.co
 127.0.0.1 geef.nl
+127.0.0.1 genius.com
 127.0.0.1 getfirefox.com
 127.0.0.1 getresponse.com
 127.0.0.1 gitlab.com
@@ -1124,6 +1133,7 @@
 127.0.0.1 imgbb.com
 127.0.0.1 imgur.com
 127.0.0.1 imu.gaytomycode.com
+127.0.0.1 includecheck.oisd.nl
 127.0.0.1 indiantimesexpress.com
 127.0.0.1 indiatimes.com
 127.0.0.1 indiegogo.com
@@ -1206,6 +1216,7 @@
 127.0.0.1 meetup.com
 127.0.0.1 mega.co.nz
 127.0.0.1 meltwater.com
+127.0.0.1 merriam-webster.com
 127.0.0.1 m.facebook.com
 127.0.0.1 midandsouthessexformulary.nhs.uk
 127.0.0.1 midandsouthessex.ics.nhs.uk
@@ -1229,6 +1240,7 @@
 127.0.0.1 mpp.vindicosuite.com
 127.0.0.1 msg-broker-int.sussex.nhs.uk
 127.0.0.1 msn.com
+127.0.0.1 m.somethingawful.com
 127.0.0.1 m.stitcher.com
 127.0.0.1 msufcu.actonservice.com
 127.0.0.1 m.twitch.tv
@@ -1253,6 +1265,8 @@
 127.0.0.1 northeastessexoutofhours.nhs.uk
 127.0.0.1 northessexiapt.nhs.uk
 127.0.0.1 northmiddlesex.servelec.thirdparty.nhs.uk
+127.0.0.1 nsfw-check.oisd.nl
+127.0.0.1 nsfw_check.oisd.nl
 127.0.0.1 nsw.gov.au
 127.0.0.1 nwlondonsexualhealth.nhs.uk
 127.0.0.1 nyaa.si
@@ -1260,6 +1274,7 @@
 127.0.0.1 nypost.com
 127.0.0.1 nytimes.com
 127.0.0.1 oceanautomotive.actonservice.com
+127.0.0.1 oisd.nl
 127.0.0.1 okx.com
 127.0.0.1 oncoclinicas.actonservice.com
 127.0.0.1 onesignal.com
@@ -1336,13 +1351,16 @@
 127.0.0.1 rebrand.ly
 127.0.0.1 reuters.com
 127.0.0.1 rfa.org
+127.0.0.1 rfi.fr
 127.0.0.1 rspb.royalsocietypublishing.org
+127.0.0.1 rthk.hk
 127.0.0.1 rtl.de
 127.0.0.1 r.turn.com
 127.0.0.1 rum-http-intake.logs.datadoghq.com
 127.0.0.1 rutracker.org
 127.0.0.1 s0.wp.com
 127.0.0.1 s7.addthis.com
+127.0.0.1 sa.bbc.co.uk
 127.0.0.1 sacred-texts.com
 127.0.0.1 salon.com
 127.0.0.1 sb.scorecardresearch.com
@@ -1391,6 +1409,7 @@
 127.0.0.1 slashfilm.com
 127.0.0.1 sodahead.com
 127.0.0.1 solidscape.actonservice.com
+127.0.0.1 somethingawful.com
 127.0.0.1 sonypictures.com
 127.0.0.1 sourceforge.net
 127.0.0.1 sourceware.org
@@ -1409,7 +1428,10 @@
 127.0.0.1 static.addtoany.com
 127.0.0.1 static.cloudflareinsights.com
 127.0.0.1 static.wixstatic.com
+127.0.0.1 stats2.arstechnica.com
+127.0.0.1 stats.bbc.co.uk
 127.0.0.1 stats.framasoft.org
+127.0.0.1 stats.merriam-webster.com
 127.0.0.1 stats.wp.com
 127.0.0.1 steamcommunity.com
 127.0.0.1 steampowered.com
@@ -1423,6 +1445,8 @@
 127.0.0.1 stripes.com
 127.0.0.1 stuff.co.nz
 127.0.0.1 subscriptionsext.indiatimes.com
+127.0.0.1 substackcdn.com
+127.0.0.1 substack.com
 127.0.0.1 success.act-on.com
 127.0.0.1 sucuri.net
 127.0.0.1 suffolkandessex.icb.nhs.uk
@@ -1470,10 +1494,12 @@
 127.0.0.1 tch-ise-g-01.xsouthessex-trust.nhs.uk
 127.0.0.1 telegram.org
 127.0.0.1 telegraph.co.uk
+127.0.0.1 test.oisd.nl
 127.0.0.1 tf1.fr
 127.0.0.1 thedenverchannel.com
 127.0.0.1 thedrum.com
 127.0.0.1 thegospelcoalition.org
+127.0.0.1 theguardian.com
 127.0.0.1 thejournal.ie
 127.0.0.1 theonion.com
 127.0.0.1 thepiratebay.org
@@ -1520,6 +1546,7 @@
 127.0.0.1 viber.com
 127.0.0.1 videos.cancermatterswessex.nhs.uk
 127.0.0.1 view.adjust.com
+127.0.0.1 visualscience.external.bbc.co.uk
 127.0.0.1 vk.com
 127.0.0.1 vox.com
 127.0.0.1 vpn.suffolkandessex.icb.nhs.uk
@@ -1585,9 +1612,11 @@
 127.0.0.1 www.atocan.eu
 127.0.0.1 www.audible.com
 127.0.0.1 www.awin1.com
+127.0.0.1 www.bbc.com
 127.0.0.1 www.beacons.ai
 127.0.0.1 www.bgr.com
 127.0.0.1 www.bigthink.com
+127.0.0.1 www.bild.de
 127.0.0.1 www.bing.com
 127.0.0.1 www.biomedcentral.com
 127.0.0.1 www.bioone.org
@@ -1605,6 +1634,7 @@
 127.0.0.1 www.cbn.com
 127.0.0.1 www.cdbaby.com
 127.0.0.1 www.channel3000.com
+127.0.0.1 www.chess.com
 127.0.0.1 www.china.org.cn
 127.0.0.1 www.cio.com
 127.0.0.1 www.circleid.com
@@ -1735,6 +1765,7 @@
 127.0.0.1 www.rb.gy
 127.0.0.1 www.reason.com
 127.0.0.1 www.reuters.com
+127.0.0.1 www.rfi.fr
 127.0.0.1 www.sacred-texts.com
 127.0.0.1 www.salon.com
 127.0.0.1 www.scienceblogs.com
@@ -1757,6 +1788,7 @@
 127.0.0.1 www.sid-dev.sussex.nhs.uk
 127.0.0.1 www.sid.sussex.nhs.uk
 127.0.0.1 www.site.adform.com
+127.0.0.1 www.somethingawful.com
 127.0.0.1 www.sonypictures.com
 127.0.0.1 www.sourceware.org
 127.0.0.1 www.speedcurve.com
@@ -1789,6 +1821,7 @@
 127.0.0.1 www.taboola.com
 127.0.0.1 www.target.com
 127.0.0.1 www.tate.org.uk
+127.0.0.1 www.theguardian.com
 127.0.0.1 www.thejournal.ie
 127.0.0.1 www.theonion.com
 127.0.0.1 www.thepiratebay.org
@@ -1824,6 +1857,7 @@
 127.0.0.1 www.wossexualhealthmcn.scot.nhs.uk
 127.0.0.1 www.xfinity.com
 127.0.0.1 www.xnview.com
+127.0.0.1 www.xxxlutz.de
 127.0.0.1 www.youtube.com
 127.0.0.1 www.youtube-nocookie.com
 127.0.0.1 www.yumpu.com
@@ -1858,3 +1892,5 @@
 127.0.0.1 zemanta.com
 127.0.0.1 zendesk.com
 127.0.0.1 zoominfo.com
+127.0.0.1 zzznsfw.test.oisd.nl
+127.0.0.1 zzztest.oisd.nl
