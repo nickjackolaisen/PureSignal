@@ -716,6 +716,7 @@
 127.0.0.1 camisado.actonservice.com
 127.0.0.1 canal4rd.com
 127.0.0.1 cancermatterswessex.nhs.uk
+127.0.0.1 canva.com
 127.0.0.1 caps-a-holic.com
 127.0.0.1 car-manager.gaytomycode.com
 127.0.0.1 cbn.com
@@ -833,6 +834,7 @@
 127.0.0.1 ems.suffolkandessex.icb.nhs.uk
 127.0.0.1 encrypted-tbn1.gstatic.com
 127.0.0.1 epic.org
+127.0.0.1 escfromporn.com
 127.0.0.1 eschsupply.actonservice.com
 127.0.0.1 esrb.org
 127.0.0.1 essex.ac.uk
@@ -886,6 +888,8 @@
 127.0.0.1 gitlab.com
 127.0.0.1 gmanetwork.com
 127.0.0.1 gmnameplate.actonservice.com
+127.0.0.1 go.canva.com
+127.0.0.1 go.edu.canva.com
 127.0.0.1 gog.com
 127.0.0.1 goodhousekeeping.com
 127.0.0.1 goodreads.com
@@ -1073,6 +1077,7 @@
 127.0.0.1 google.sm
 127.0.0.1 google.sn
 127.0.0.1 google.so
+127.0.0.1 googlesource.com
 127.0.0.1 google.sr
 127.0.0.1 google.st
 127.0.0.1 googletagmanager.com
@@ -1169,7 +1174,9 @@
 127.0.0.1 lancashiresexualhealth.nhs.uk
 127.0.0.1 landstar.actonservice.com
 127.0.0.1 latimesblogs.latimes.com
+127.0.0.1 l.create.canva.com
 127.0.0.1 leicestersexualhealth.nhs.uk
+127.0.0.1 l.engage.canva.com
 127.0.0.1 lenta.ru
 127.0.0.1 lewishamsexualhealth.nhs.uk
 127.0.0.1 lh1.googleusercontent.com
@@ -1198,6 +1205,7 @@
 127.0.0.1 logs.browser-intake-datadoghq.com
 127.0.0.1 logs.datadoghq.com
 127.0.0.1 lothiansexualhealth.scot.nhs.uk
+127.0.0.1 l.support.canva.com
 127.0.0.1 lulu.com
 127.0.0.1 m.18f.org
 127.0.0.1 maformationofficinale.actonservice.com
@@ -1245,6 +1253,8 @@
 127.0.0.1 msufcu.actonservice.com
 127.0.0.1 m.twitch.tv
 127.0.0.1 mud-n-more.gaytomycode.com
+127.0.0.1 myanimelist.com
+127.0.0.1 myanimelist.net
 127.0.0.1 myhealthessex.nhs.uk
 127.0.0.1 mylifetime.com
 127.0.0.1 m.youtube.com
@@ -1281,6 +1291,7 @@
 127.0.0.1 oosext.spft.nhs.uk
 127.0.0.1 opendoors.nhs.uk
 127.0.0.1 openlibrary.org
+127.0.0.1 open.spotify.com
 127.0.0.1 opensubtitles.org
 127.0.0.1 openuserjs.org
 127.0.0.1 optimizely.com
@@ -1338,6 +1349,7 @@
 127.0.0.1 quantcast.com
 127.0.0.1 questintegrity.actonservice.com
 127.0.0.1 quidel.actonservice.com
+127.0.0.1 qwant.com
 127.0.0.1 rainn.org
 127.0.0.1 rakuten.co.jp
 127.0.0.1 rambler.ru
@@ -1418,11 +1430,13 @@
 127.0.0.1 sp.analytics.yahoo.com
 127.0.0.1 speedcurve.com
 127.0.0.1 spermdonation.nhs.uk
+127.0.0.1 spotify.com
 127.0.0.1 spreadshirt.com
 127.0.0.1 srf.ch
 127.0.0.1 srv.stackadapt.com
 127.0.0.1 staging.suffolkandnortheastessex.icb.nhs.uk
 127.0.0.1 starterupsteve.com
+127.0.0.1 startpage.com
 127.0.0.1 statcounter.com
 127.0.0.1 state.nj.us
 127.0.0.1 static.addtoany.com
@@ -1513,6 +1527,7 @@
 127.0.0.1 townsquareinteractive.actonservice.com
 127.0.0.1 toybox.com
 127.0.0.1 tquestsexualhealth.hslpathology.thirdparty.nhs.uk
+127.0.0.1 track.canva.com
 127.0.0.1 tracker.marinsm.com
 127.0.0.1 tracking.g2crowd.com
 127.0.0.1 transshemalecams.blogspot.com
@@ -1631,6 +1646,7 @@
 127.0.0.1 www.buzzsumo.com
 127.0.0.1 www.c1.adform.net
 127.0.0.1 www.cancermatterswessex.nhs.uk
+127.0.0.1 www.canva.com
 127.0.0.1 www.cbn.com
 127.0.0.1 www.cdbaby.com
 127.0.0.1 www.channel3000.com
@@ -1759,6 +1775,7 @@
 127.0.0.1 www.pubmatic.com
 127.0.0.1 www.qualtrics.com
 127.0.0.1 www.quantcast.com
+127.0.0.1 www.qwant.com
 127.0.0.1 www.rakuten.co.jp
 127.0.0.1 www.rankia.com
 127.0.0.1 www.rarlab.com
@@ -1794,6 +1811,7 @@
 127.0.0.1 www.speedcurve.com
 127.0.0.1 www.spermdonation.nhs.uk
 127.0.0.1 www.srf.ch
+127.0.0.1 www.startpage.com
 127.0.0.1 www.statcounter.com
 127.0.0.1 www.stern.de
 127.0.0.1 www.stitcher.com
