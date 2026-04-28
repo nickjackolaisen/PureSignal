@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": { "type": "redirect", "redirect": { "extensionPath": "/blocked.html" } },
+    "condition": {
+      "urlFilter": "||puresignal-placeholder.invalid^",
+      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest", "image", "media"]
+    }
+  }
+]

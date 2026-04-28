@@ -3,3 +3,7 @@ merged
 sources
 scripts/pull.sh
 extension/rules/blocklist_core_*.json
+!extension/rules/blocklist_core_01.json
+!extension/rules/blocklist_core_02.json
+!extension/rules/blocklist_core_03.json
+!extension/rules/blocklist_core_04.json
