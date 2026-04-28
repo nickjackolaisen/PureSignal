@@ -10,9 +10,31 @@ const app = express();
 const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_placeholder");
 const port = Number(process.env.PORT || 8787);
+const allowedOrigins = String(process.env.CORS_ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
 
-app.use(cors());
-app.use(express.json({ limit: "1mb" }));
+const PLAN_PRICE_ENV: Record<"ext_pro" | "desktop_pro" | "bundle_pro", { monthly: string; annual: string }> = {
+  ext_pro: {
+    monthly: process.env.STRIPE_PRICE_EXT_PRO_MONTHLY || "",
+    annual: process.env.STRIPE_PRICE_EXT_PRO_ANNUAL || ""
+  },
+  desktop_pro: {
+    monthly: process.env.STRIPE_PRICE_DESKTOP_PRO_MONTHLY || "",
+    annual: process.env.STRIPE_PRICE_DESKTOP_PRO_ANNUAL || ""
+  },
+  bundle_pro: {
+    monthly: process.env.STRIPE_PRICE_BUNDLE_PRO_MONTHLY || "",
+    annual: process.env.STRIPE_PRICE_BUNDLE_PRO_ANNUAL || ""
+  }
+};
+
+app.use(
+  cors({
+    origin: allowedOrigins.length ? allowedOrigins : true
+  })
+);
 
 function redact(input: unknown) {
   const value = JSON.stringify(input || {});
@@ -45,97 +67,18 @@ const telemetrySchema = z.object({
   errorCode: z.string().optional()
 });
 
-app.get("/health", (_req, res) => {
-  res.json({ ok: true, service: "platform-api" });
+const checkoutSchema = z.object({
+  userId: z.string().min(1),
+  planCode: z.enum(["ext_pro", "desktop_pro", "bundle_pro"]),
+  interval: z.enum(["monthly", "annual"]),
+  successUrl: z.string().url(),
+  cancelUrl: z.string().url()
 });
 
-app.get("/v1/status", async (_req, res) => {
-  const latestRelease = await prisma.blocklistRelease.findFirst({
-    orderBy: { publishedAt: "desc" }
-  });
-  res.json({
-    ok: true,
-    api: "online",
-    blocklistVersion: latestRelease?.version || "none",
-    publishedAt: latestRelease?.publishedAt || null
-  });
-});
-
-app.post("/v1/devices/register", async (req, res) => {
-  const payload = deviceRegisterSchema.parse(req.body);
-  const device = await prisma.device.create({
-    data: {
-      userId: payload.userId,
-      type: payload.type,
-      name: payload.name,
-      appVersion: payload.appVersion,
-      deviceTokenHash: payload.deviceTokenHash,
-      lastSeenAt: new Date()
-    }
-  });
-  res.status(201).json({ deviceId: device.id, refreshToken: `dev_${device.id}` });
-});
-
-app.get("/v1/entitlements", async (req, res) => {
-  const userId = String(req.query.userId || "");
-  if (!userId) {
-    res.status(400).json({ error: "userId is required" });
-    return;
-  }
-  const subscription = await prisma.subscription.findFirst({ where: { userId } });
-  const entitlement = await prisma.entitlement.findFirst({ where: { scopeType: "user", scopeId: userId } });
-  const planCode = normalizePlanCode(entitlement?.planCode || subscription?.planCode || "free");
-  const flags = PLAN_FLAGS[planCode];
-  res.json({ planCode, flags });
-});
-
-app.get("/v1/blocklist/manifest", async (_req, res) => {
-  const release = await prisma.blocklistRelease.findFirst({ orderBy: { publishedAt: "desc" } });
-  if (!release) {
-    res.status(404).json({ error: "No blocklist release published" });
-    return;
-  }
-  res.json({
-    version: release.version,
-    artifactUrls: release.artifactUrls,
-    sha256: release.sha256,
-    minClientVersion: "1.0.0",
-    signature: "replace-with-real-signature"
-  });
-});
-
-app.post("/v1/alerts", async (req, res) => {
-  const payload = alertsSchema.parse(req.body);
-  const subscription = await prisma.subscription.findFirst({ where: { userId: payload.userId } });
-  const planCode = normalizePlanCode(subscription?.planCode || "free");
-  if (!PLAN_FLAGS[planCode].partnerRelay) {
-    res.status(403).json({ error: "Partner relay requires paid entitlement" });
-    return;
-  }
-  const event = await prisma.alertEvent.create({
-    data: {
-      userId: payload.userId,
-      deviceId: payload.deviceId,
-      type: payload.type,
-      payloadRedacted: redact(payload.payload),
-      deliveryStatus: "queued"
-    }
-  });
-  res.status(202).json({ ok: true, eventId: event.id });
-});
-
-app.post("/v1/telemetry", async (req, res) => {
-  const payload = telemetrySchema.parse(req.body);
-  await prisma.adminAuditLog.create({
-    data: {
-      actorEmail: "telemetry@system",
-      action: "telemetry_event",
-      targetId: payload.deviceId,
-      metadata: redact(payload)
-    }
-  });
-  res.status(202).json({ ok: true });
-});
+function resolvePriceId(planCode: "ext_pro" | "desktop_pro" | "bundle_pro", interval: "monthly" | "annual") {
+  const value = PLAN_PRICE_ENV[planCode][interval];
+  return value || null;
+}
 
 app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
@@ -186,9 +129,7 @@ app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async
       const customerId = String(subscription.customer || "");
       const status = subscription.status;
       const metadataPlan = normalizePlanCode(String(subscription.metadata?.plan_code || "free"));
-      const currentPeriodEnd = subscription.current_period_end
-        ? new Date(subscription.current_period_end * 1000)
-        : null;
+      const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
       const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
       if (existing) {
         const planCode = status === "active" ? metadataPlan : "free";
@@ -227,24 +168,137 @@ app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async
   }
 });
 
+app.use(express.json({ limit: "1mb" }));
+
+app.get("/health", (_req, res) => {
+  res.json({ ok: true, service: "platform-api" });
+});
+
+app.get("/v1/status", async (_req, res) => {
+  const latestRelease = await prisma.blocklistRelease.findFirst({
+    orderBy: { publishedAt: "desc" }
+  });
+  res.json({
+    ok: true,
+    api: "online",
+    blocklistVersion: latestRelease?.version || "none",
+    publishedAt: latestRelease?.publishedAt || null
+  });
+});
+
+app.get("/v1/billing/config", (_req, res) => {
+  res.json({
+    pricesConfigured: {
+      ext_pro: {
+        monthly: Boolean(PLAN_PRICE_ENV.ext_pro.monthly),
+        annual: Boolean(PLAN_PRICE_ENV.ext_pro.annual)
+      },
+      desktop_pro: {
+        monthly: Boolean(PLAN_PRICE_ENV.desktop_pro.monthly),
+        annual: Boolean(PLAN_PRICE_ENV.desktop_pro.annual)
+      },
+      bundle_pro: {
+        monthly: Boolean(PLAN_PRICE_ENV.bundle_pro.monthly),
+        annual: Boolean(PLAN_PRICE_ENV.bundle_pro.annual)
+      }
+    }
+  });
+});
+
+app.post("/v1/devices/register", async (req, res) => {
+  const payload = deviceRegisterSchema.parse(req.body);
+  const device = await prisma.device.create({
+    data: {
+      userId: payload.userId,
+      type: payload.type,
+      name: payload.name,
+      appVersion: payload.appVersion,
+      deviceTokenHash: payload.deviceTokenHash,
+      lastSeenAt: new Date()
+    }
+  });
+  res.status(201).json({ deviceId: device.id, refreshToken: `dev_${device.id}` });
+});
+
+app.get("/v1/entitlements", async (req, res) => {
+  const userId = String(req.query.userId || "");
+  if (!userId) {
+    res.status(400).json({ error: "userId is required" });
+    return;
+  }
+  const subscription = await prisma.subscription.findFirst({ where: { userId } });
+  const entitlement = await prisma.entitlement.findFirst({ where: { scopeType: "user", scopeId: userId } });
+  const planCode = normalizePlanCode(entitlement?.planCode || subscription?.planCode || "free");
+  const flags = PLAN_FLAGS[planCode];
+  res.json({ planCode, flags });
+});
+
+app.get("/v1/blocklist/manifest", async (_req, res) => {
+  const release = await prisma.blocklistRelease.findFirst({ orderBy: { publishedAt: "desc" } });
+  if (!release) {
+    res.status(404).json({ error: "No blocklist release published" });
+    return;
+  }
+  res.json({
+    version: release.version,
+    artifactUrls: release.artifactUrls,
+    sha256: release.sha256,
+    minClientVersion: "1.0.0",
+    signature: process.env.BLOCKLIST_MANIFEST_SIGNATURE || ""
+  });
+});
+
+app.post("/v1/alerts", async (req, res) => {
+  const payload = alertsSchema.parse(req.body);
+  const subscription = await prisma.subscription.findFirst({ where: { userId: payload.userId } });
+  const planCode = normalizePlanCode(subscription?.planCode || "free");
+  if (!PLAN_FLAGS[planCode].partnerRelay) {
+    res.status(403).json({ error: "Partner relay requires paid entitlement" });
+    return;
+  }
+  const event = await prisma.alertEvent.create({
+    data: {
+      userId: payload.userId,
+      deviceId: payload.deviceId,
+      type: payload.type,
+      payloadRedacted: redact(payload.payload),
+      deliveryStatus: "queued"
+    }
+  });
+  res.status(202).json({ ok: true, eventId: event.id });
+});
+
+app.post("/v1/telemetry", async (req, res) => {
+  const payload = telemetrySchema.parse(req.body);
+  await prisma.adminAuditLog.create({
+    data: {
+      actorEmail: "telemetry@system",
+      action: "telemetry_event",
+      targetId: payload.deviceId,
+      metadata: redact(payload)
+    }
+  });
+  res.status(202).json({ ok: true });
+});
+
 app.post("/v1/billing/create-checkout", async (req, res) => {
-  const payload = z
-    .object({
-      userId: z.string().min(1),
-      planCode: z.enum(["ext_pro", "desktop_pro", "bundle_pro"]),
-      priceId: z.string().min(1),
-      successUrl: z.string().url(),
-      cancelUrl: z.string().url()
-    })
-    .parse(req.body);
+  const payload = checkoutSchema.parse(req.body);
+  const priceId = resolvePriceId(payload.planCode, payload.interval);
+  if (!priceId) {
+    res.status(503).json({ error: `Price is not configured for ${payload.planCode}:${payload.interval}` });
+    return;
+  }
 
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     client_reference_id: payload.userId,
-    line_items: [{ price: payload.priceId, quantity: 1 }],
+    line_items: [{ price: priceId, quantity: 1 }],
     success_url: payload.successUrl,
     cancel_url: payload.cancelUrl,
-    metadata: { plan_code: payload.planCode }
+    metadata: { plan_code: payload.planCode },
+    subscription_data: {
+      metadata: { plan_code: payload.planCode }
+    }
   });
   res.json({ checkoutUrl: session.url });
 });

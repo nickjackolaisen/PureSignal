@@ -310,8 +310,13 @@ async function syncEntitlements() {
   }
 }
 
-function hasValidManifestSignature(payload, expectedSignature) {
-  return Boolean(payload?.signature && payload?.artifactUrls?.delta);
+function hasValidManifestSignature(payload) {
+  return Boolean(
+    payload?.signature &&
+      payload?.artifactUrls?.delta &&
+      typeof payload?.version === "string" &&
+      typeof payload?.sha256 === "string"
+  );
 }
 
 function base64ToUint8Array(base64) {

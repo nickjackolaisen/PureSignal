@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 type DashboardState = {
-  user: { email: string; userId: string };
+  user: { email: string; userId: string; provider?: string };
   entitlements: { planCode: string; flags: Record<string, boolean> };
   platformStatus: { blocklistVersion?: string; publishedAt?: string };
 };
@@ -41,6 +41,7 @@ export function DashboardClient() {
       <p>
         Signed in as <strong>{data.user.email}</strong>
       </p>
+      <p>Auth provider: {data.user.provider || "unknown"}</p>
       <p>Plan: {data.entitlements.planCode}</p>
       <p>Blocklist version: {data.platformStatus.blocklistVersion || "unknown"}</p>
       <pre>{JSON.stringify(data.entitlements.flags, null, 2)}</pre>

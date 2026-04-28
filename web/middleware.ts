@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { SESSION_COOKIE_NAME } from "./src/lib/config";
 
 const protectedRoutes = ["/dashboard", "/partner"];
 
@@ -8,8 +9,8 @@ export function middleware(request: NextRequest) {
   if (!isProtected) {
     return NextResponse.next();
   }
-  const session = request.cookies.get("cg_session_email")?.value;
-  if (!session) {
+  const sessionToken = request.cookies.get(SESSION_COOKIE_NAME)?.value;
+  if (!sessionToken) {
     const url = new URL("/", request.url);
     url.searchParams.set("loginRequired", "1");
     return NextResponse.redirect(url);

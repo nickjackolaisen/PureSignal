@@ -23,3 +23,16 @@
 - Privacy policy URL.
 - Support URL.
 - Accurate claims about platform limitations.
+
+## Production URLs for submission
+
+- Privacy policy: `https://puresignal.io/legal`
+- Support: `https://puresignal.io/support`
+- Terms: `https://puresignal.io/legal`
+- Status page: `TODO`
+
+## Submission evidence
+
+- Data use questionnaire completed and reviewed against this file.
+- Final listing text reviewed against `docs/store-listing-copy.md`.
+- Video and screenshots represent current extension UI and behavior.

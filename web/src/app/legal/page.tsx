@@ -7,7 +7,9 @@ export default function LegalPage() {
         <li>Privacy Policy</li>
         <li>Cookie Policy</li>
       </ul>
-      <p className="muted">Policy markdown drafts are stored in the repository under `legal/`.</p>
+      <p className="muted">
+        Policy sources are versioned in the `legal/` directory. For legal requests, contact support@puresignal.io.
+      </p>
     </section>
   );
 }

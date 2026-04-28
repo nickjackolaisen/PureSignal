@@ -24,6 +24,13 @@ PureSignal helps you protect focus with a high-scale blocklist, configurable key
 
 PureSignal is built for privacy-first operation. Optional telemetry can be disabled. Accountability features are opt-in.
 
+### Public URLs
+
+- Privacy policy: `https://puresignal.io/legal`
+- Terms of service: `https://puresignal.io/legal`
+- Cookie policy: `https://puresignal.io/legal`
+- Support: `https://puresignal.io/support`
+
 ### Important notes
 
 Platform limitations may affect uninstall and disable visibility. PureSignal provides support tools, not guaranteed prevention of all bypass methods.
