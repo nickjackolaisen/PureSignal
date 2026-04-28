@@ -171,10 +171,13 @@ async function handleStripeWebhookEvent(event) {
         }
     }
 }
+// Stripe webhook — MUST be registered before express.json() so the body stays raw for signature verification.
 app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
-    const secret = stripeWebhookSecret();
-    if (!secret) {
-        res.status(200).json({ ok: true, ignored: true });
+    const endpointSecret = stripeWebhookSecret();
+    if (!endpointSecret) {
+        // eslint-disable-next-line no-console
+        console.error("STRIPE_WEBHOOK_SECRET is not set");
+        res.status(500).send("Server config error");
         return;
     }
     const sig = readStripeSignature(req);
@@ -185,30 +188,44 @@ app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async
     let event;
     try {
         const payload = payloadForStripeVerify(req);
-        event = stripe.webhooks.constructEvent(payload, sig, secret);
+        event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+        // eslint-disable-next-line no-console
+        console.log(`Webhook verified: ${event.type}`);
     }
     catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         // eslint-disable-next-line no-console
-        console.error("Stripe webhook verify failed:", message);
-        if (err instanceof Stripe.errors.StripeSignatureVerificationError) {
-            res.status(400).send(`Webhook signature verification failed: ${message}`);
-            return;
-        }
+        console.error("Webhook signature verification failed:", message);
         res.status(400).send(`Webhook Error: ${message}`);
         return;
     }
     try {
-        // eslint-disable-next-line no-console
-        console.log(`Stripe webhook received: ${event.type}`);
+        switch (event.type) {
+            case "checkout.session.completed": {
+                const session = event.data.object;
+                // eslint-disable-next-line no-console
+                console.log("Checkout session completed", session.id);
+                break;
+            }
+            case "customer.subscription.updated":
+            case "customer.subscription.deleted": {
+                const sub = event.data.object;
+                // eslint-disable-next-line no-console
+                console.log(`Subscription ${event.type}`, sub.id);
+                break;
+            }
+            default:
+                // eslint-disable-next-line no-console
+                console.log(`Webhook event: ${event.type}`);
+        }
         await handleStripeWebhookEvent(event);
         res.status(200).json({ received: true });
     }
-    catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
+    catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
         // eslint-disable-next-line no-console
-        console.error("Stripe webhook handler error:", message);
-        res.status(500).json({ error: "webhook_handler_failed" });
+        console.error("Error handling webhook:", message);
+        res.status(500).send("Webhook handler failed");
     }
 });
 app.use(express.json({ limit: "1mb" }));
