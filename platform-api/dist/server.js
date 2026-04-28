@@ -68,88 +68,147 @@ function resolvePriceId(planCode, interval) {
     const value = PLAN_PRICE_ENV[planCode][interval];
     return value || null;
 }
+function stripeWebhookSecret() {
+    const value = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+    return value || null;
+}
+/** Express can expose headers as string | string[] */
+function readStripeSignature(req) {
+    const raw = req.headers["stripe-signature"];
+    if (typeof raw === "string")
+        return raw;
+    if (Array.isArray(raw) && raw.length > 0)
+        return raw[0];
+    return undefined;
+}
+/** Stripe requires the exact raw bytes; must come from express.raw(), before express.json() */
+function payloadForStripeVerify(req) {
+    if (Buffer.isBuffer(req.body))
+        return req.body;
+    if (typeof req.body === "string")
+        return req.body;
+    throw new Error("Webhook body must be raw Buffer (register this route before express.json())");
+}
+/** Subscription.userId is an FK to User — ensure row exists before subscription upsert */
+async function ensureUserExistsForStripe(userId) {
+    const safeEmailLocal = userId.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 96) || "user";
+    await prisma.user.upsert({
+        where: { id: userId },
+        update: {},
+        create: {
+            id: userId,
+            email: `${safeEmailLocal}@sync.puresignal.io`,
+            authProvider: "stripe_webhook"
+        }
+    });
+}
+async function handleStripeWebhookEvent(event) {
+    if (event.type === "checkout.session.completed") {
+        const session = event.data.object;
+        const userId = String(session.client_reference_id || "");
+        const customerId = String(session.customer || "");
+        const planCode = normalizePlanCode(String(session.metadata?.plan_code || session.metadata?.planCode || "free"));
+        if (userId && customerId) {
+            await ensureUserExistsForStripe(userId);
+            await prisma.subscription.upsert({
+                where: { stripeCustomerId: customerId },
+                update: { status: "active", planCode },
+                create: {
+                    userId,
+                    stripeCustomerId: customerId,
+                    status: "active",
+                    planCode
+                }
+            });
+            await prisma.entitlement.upsert({
+                where: { id: `ent_${userId}` },
+                update: { planCode, flags: PLAN_FLAGS[planCode] },
+                create: {
+                    id: `ent_${userId}`,
+                    scopeType: "user",
+                    scopeId: userId,
+                    planCode,
+                    flags: PLAN_FLAGS[planCode]
+                }
+            });
+        }
+    }
+    if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
+        const subscription = event.data.object;
+        const customerId = String(subscription.customer || "");
+        const status = subscription.status;
+        const metadataPlan = normalizePlanCode(String(subscription.metadata?.plan_code || "free"));
+        const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
+        const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
+        if (existing) {
+            const planCode = status === "active" ? metadataPlan : "free";
+            await prisma.subscription.update({
+                where: { stripeCustomerId: customerId },
+                data: { status, planCode, currentPeriodEnd }
+            });
+            await prisma.entitlement.upsert({
+                where: { id: `ent_${existing.userId}` },
+                update: { planCode, flags: PLAN_FLAGS[planCode] },
+                create: {
+                    id: `ent_${existing.userId}`,
+                    scopeType: "user",
+                    scopeId: existing.userId,
+                    planCode,
+                    flags: PLAN_FLAGS[planCode]
+                }
+            });
+        }
+    }
+    if (event.type === "invoice.payment_failed") {
+        const invoice = event.data.object;
+        const customerId = String(invoice.customer || "");
+        const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
+        if (existing) {
+            await prisma.subscription.update({
+                where: { stripeCustomerId: customerId },
+                data: { status: "past_due" }
+            });
+        }
+    }
+}
 app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
-    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    const secret = stripeWebhookSecret();
+    if (!secret) {
         res.status(200).json({ ok: true, ignored: true });
         return;
     }
-    const sig = req.headers["stripe-signature"];
+    const sig = readStripeSignature(req);
     if (!sig) {
-        res.status(400).send("Missing signature");
+        res.status(400).send("Missing stripe-signature header");
+        return;
+    }
+    let event;
+    try {
+        const payload = payloadForStripeVerify(req);
+        event = stripe.webhooks.constructEvent(payload, sig, secret);
+    }
+    catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        // eslint-disable-next-line no-console
+        console.error("Stripe webhook verify failed:", message);
+        if (err instanceof Stripe.errors.StripeSignatureVerificationError) {
+            res.status(400).send(`Webhook signature verification failed: ${message}`);
+            return;
+        }
+        res.status(400).send(`Webhook Error: ${message}`);
         return;
     }
     try {
-        const event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-        if (event.type === "checkout.session.completed") {
-            const session = event.data.object;
-            const userId = String(session.client_reference_id || "");
-            const customerId = String(session.customer || "");
-            const planCode = normalizePlanCode(String(session.metadata?.plan_code || session.metadata?.planCode || "free"));
-            if (userId && customerId) {
-                await prisma.subscription.upsert({
-                    where: { stripeCustomerId: customerId },
-                    update: { status: "active", planCode },
-                    create: {
-                        userId,
-                        stripeCustomerId: customerId,
-                        status: "active",
-                        planCode
-                    }
-                });
-                await prisma.entitlement.upsert({
-                    where: { id: `ent_${userId}` },
-                    update: { planCode, flags: PLAN_FLAGS[planCode] },
-                    create: {
-                        id: `ent_${userId}`,
-                        scopeType: "user",
-                        scopeId: userId,
-                        planCode,
-                        flags: PLAN_FLAGS[planCode]
-                    }
-                });
-            }
-        }
-        if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
-            const subscription = event.data.object;
-            const customerId = String(subscription.customer || "");
-            const status = subscription.status;
-            const metadataPlan = normalizePlanCode(String(subscription.metadata?.plan_code || "free"));
-            const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
-            const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
-            if (existing) {
-                const planCode = status === "active" ? metadataPlan : "free";
-                await prisma.subscription.update({
-                    where: { stripeCustomerId: customerId },
-                    data: { status, planCode, currentPeriodEnd }
-                });
-                await prisma.entitlement.upsert({
-                    where: { id: `ent_${existing.userId}` },
-                    update: { planCode, flags: PLAN_FLAGS[planCode] },
-                    create: {
-                        id: `ent_${existing.userId}`,
-                        scopeType: "user",
-                        scopeId: existing.userId,
-                        planCode,
-                        flags: PLAN_FLAGS[planCode]
-                    }
-                });
-            }
-        }
-        if (event.type === "invoice.payment_failed") {
-            const invoice = event.data.object;
-            const customerId = String(invoice.customer || "");
-            const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
-            if (existing) {
-                await prisma.subscription.update({
-                    where: { stripeCustomerId: customerId },
-                    data: { status: "past_due" }
-                });
-            }
-        }
+        // eslint-disable-next-line no-console
+        console.log(`Stripe webhook received: ${event.type}`);
+        await handleStripeWebhookEvent(event);
         res.status(200).json({ received: true });
     }
-    catch {
-        res.status(400).send("Invalid signature");
+    catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        // eslint-disable-next-line no-console
+        console.error("Stripe webhook handler error:", message);
+        res.status(500).json({ error: "webhook_handler_failed" });
     }
 });
 app.use(express.json({ limit: "1mb" }));
