@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PureSignal Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="card">
+        <h1>PureSignal Settings</h1>
+        <p class="muted">Configure blocking, whitelist exceptions, and accountability alerts.</p>
+        <p id="planStatus" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <h2>Blocking</h2>
+        <label><input id="rulesetCore" type="checkbox" /> Enable core blocklist ruleset</label>
+        <label><input id="rulesetSafe" type="checkbox" /> Enable safe-search redirect ruleset</label>
+        <label><input id="protectionEnabled" type="checkbox" /> Protection enabled</label>
+        <p class="muted">Turning protection off requires a 30-minute cooldown and partner alert (if configured).</p>
+        <label for="disableReason">Disable reason (required only when requesting disable)</label>
+        <input id="disableReason" type="text" placeholder="Why do you need to disable right now?" />
+        <button id="requestDisable" class="secondary">Request disable (30-minute cooldown)</button>
+        <button id="cancelDisable" class="secondary">Cancel disable request</button>
+        <p id="disableStatus" class="muted"></p>
+        <label><input id="keywordBlockingEnabled" type="checkbox" /> Enable keyword blocking</label>
+        <label for="keywordList">Keyword list (comma-separated)</label>
+        <input id="keywordList" type="text" />
+        <p class="muted">Warning: simple keywords can cause false positives. Keep this list focused.</p>
+      </section>
+
+      <section class="card">
+        <h2>Whitelist (24h Cooldown)</h2>
+        <div class="row">
+          <div>
+            <label for="wlDomain">Domain</label>
+            <input id="wlDomain" type="text" placeholder="example.com" />
+          </div>
+          <div>
+            <label for="wlReason">Reason</label>
+            <input id="wlReason" type="text" placeholder="Temporary exception" />
+          </div>
+        </div>
+        <button id="addWhitelist">Add whitelist entry</button>
+        <ul id="whitelistItems" class="list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Security</h2>
+        <label for="password">Set settings password</label>
+        <input id="password" type="password" placeholder="Minimum 8 characters" />
+        <button id="savePassword">Save password hash</button>
+        <p id="passwordStatus" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <h2>Accountability Partner</h2>
+        <label for="partnerLabel">Partner label</label>
+        <input id="partnerLabel" type="text" placeholder="Coach, spouse, mentor" />
+        <label for="apiBaseUrl">Platform API base URL</label>
+        <input id="apiBaseUrl" type="text" placeholder="https://api.puresignal.io" />
+        <label for="apiUserId">User ID</label>
+        <input id="apiUserId" type="text" placeholder="user_123" />
+        <label for="apiDeviceId">Device ID</label>
+        <input id="apiDeviceId" type="text" placeholder="device_123" />
+        <label for="apiToken">API token</label>
+        <input id="apiToken" type="password" placeholder="short-lived token" />
+        <label><input id="partnerConsent" type="checkbox" /> I have consent to notify this partner.</label>
+        <button id="testPartner" class="secondary">Send test alert</button>
+        <p id="partnerProHint" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <h2>Updates</h2>
+        <label for="remoteDeltaUrl">Remote delta URL (JSON payload: { domains: [] })</label>
+        <input id="remoteDeltaUrl" type="text" placeholder="https://your-server/blocklist-delta.json" />
+        <label for="signedManifestUrl">Signed manifest URL</label>
+        <input id="signedManifestUrl" type="text" placeholder="https://api.puresignal.io/v1/blocklist/manifest" />
+        <label for="manifestPublicKeyJwk">Manifest public key JWK (for signature verification)</label>
+        <input id="manifestPublicKeyJwk" type="text" placeholder='{"kty":"EC",...}' />
+        <label><input id="telemetryEnabled" type="checkbox" /> Enable privacy-safe telemetry</label>
+      </section>
+
+      <section class="card">
+        <h2>False Positive Report</h2>
+        <label for="reportEmail">Email</label>
+        <input id="reportEmail" type="email" placeholder="you@example.com" />
+        <label for="reportDomain">Domain</label>
+        <input id="reportDomain" type="text" placeholder="example.com" />
+        <label for="reportReason">Reason</label>
+        <input id="reportReason" type="text" placeholder="Why this should be reviewed" />
+        <button id="submitReport" class="secondary">Submit report</button>
+        <p id="reportStatus" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <button id="saveSettings">Save settings</button>
+        <p id="saveStatus" class="muted"></p>
+      </section>
+    </main>
+    <script src="options.js" type="module"></script>
+  </body>
+</html>

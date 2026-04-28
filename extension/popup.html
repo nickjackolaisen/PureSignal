@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PureSignal</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        min-width: 360px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <section class="card">
+        <h1>PureSignal</h1>
+        <p class="muted">Guard your signal. Silence the noise.</p>
+        <p id="protectionStatus"></p>
+        <p id="streak"></p>
+        <p id="attempts" class="muted"></p>
+        <p id="planBadge" class="muted"></p>
+        <button id="upgradeButton" class="secondary">Upgrade to Pro</button>
+      </section>
+
+      <section class="card">
+        <h2>Quick Whitelist (24h)</h2>
+        <label for="domain">Domain</label>
+        <input id="domain" type="text" placeholder="example.com" />
+        <label for="reason">Reason</label>
+        <input id="reason" type="text" placeholder="Work login flow" />
+        <button id="addWhitelist">Add 24-hour allow rule</button>
+        <p id="whitelistStatus" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <button id="openOptions" class="secondary">Open Full Settings</button>
+      </section>
+    </main>
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>

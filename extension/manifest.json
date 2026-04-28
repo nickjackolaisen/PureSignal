@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+  "name": "PureSignal - Block Porn & Build Focus",
+  "version": "1.0.0",
+  "description": "Block harmful sites, stay focused, and keep your progress visible.",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "PureSignal",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "storage",
+    "alarms",
+    "notifications",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "blocklist_core_01",
+        "enabled": true,
+        "path": "rules/blocklist_core_01.json"
+      },
+      {
+        "id": "blocklist_core_02",
+        "enabled": true,
+        "path": "rules/blocklist_core_02.json"
+      },
+      {
+        "id": "blocklist_core_03",
+        "enabled": true,
+        "path": "rules/blocklist_core_03.json"
+      },
+      {
+        "id": "blocklist_core_04",
+        "enabled": true,
+        "path": "rules/blocklist_core_04.json"
+      },
+      {
+        "id": "safebrowsing_redirects",
+        "enabled": true,
+        "path": "rules/safebrowsing_redirects.json"
+      }
+    ]
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "blocked.html",
+        "blocked.js",
+        "styles.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

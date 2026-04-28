@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PureSignal Blocked</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="card">
+        <h1>This page was blocked by PureSignal</h1>
+        <p>Guard your signal. Silence the noise.</p>
+        <p id="streakText" class="muted">Loading streak...</p>
+      </section>
+
+      <section class="card">
+        <h2>Log Urge</h2>
+        <p id="breathing" class="muted">Breathing timer: press start for a 60-second reset.</p>
+        <button id="startBreathing" class="secondary">Start breathing timer</button>
+        <label for="urgeNote">What happened?</label>
+        <textarea id="urgeNote" rows="4" placeholder="Trigger, mood, action plan"></textarea>
+        <button id="saveUrge">Save entry</button>
+        <p id="urgeStatus" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <button id="openOptions" class="secondary">Open PureSignal Settings</button>
+      </section>
+    </main>
+    <script src="blocked.js" type="module"></script>
+  </body>
+</html>

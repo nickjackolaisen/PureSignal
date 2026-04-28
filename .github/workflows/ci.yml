@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+jobs:
+  basic-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate extension JavaScript syntax
+        run: |
+          node --check extension/background.js
+          node --check extension/blocked.js
+          node --check extension/options.js
+          node --check extension/popup.js
+      - name: Verify rules generation scripts
+        run: |
+          node --check extension/scripts/generate-core-rules.mjs
+          node --check extension/scripts/generate-safebrowsing-rules.mjs
+      - name: Install and test platform API
+        working-directory: platform-api
+        run: |
+          npm install
+          npm run build
+          npm run test

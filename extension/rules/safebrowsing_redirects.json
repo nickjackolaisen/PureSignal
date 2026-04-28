@@ -1,0 +1,3170 @@
+[
+  {
+    "id": 900001,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.bing.com/safesearch?setlang=en-us&adlt=strict"
+      }
+    },
+    "condition": {
+      "urlFilter": "||bing.com^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900002,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ad^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900003,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ae^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900004,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.al^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900005,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.am^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900006,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.as^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900007,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.at^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900008,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.az^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900009,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ba^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900010,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.be^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900011,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.bf^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900012,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.bg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900013,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.bi^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900014,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.bj^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900015,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.bs^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900016,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.bt^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900017,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.by^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900018,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ca^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900019,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cat^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900020,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cd^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900021,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cf^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900022,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900023,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ch^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900024,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ci^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900025,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cl^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900026,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900027,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900028,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.ao^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900029,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.bw^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900030,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.ck^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900031,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.cr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900032,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.id^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900033,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.il^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900034,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.in^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900035,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.jp^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900036,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.ke^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900037,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.kr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900038,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.ls^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900039,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.ma^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900040,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.mz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900041,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.nz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900042,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.th^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900043,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.tz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900044,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.ug^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900045,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.uk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900046,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.uz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900047,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.ve^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900048,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.vi^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900049,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.za^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900050,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.zm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900051,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.co.zw^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900052,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900053,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.af^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900054,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ag^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900055,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ai^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900056,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ar^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900057,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.au^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900058,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.bd^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900059,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.bh^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900060,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.bn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900061,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.bo^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900062,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.br^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900063,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.bz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900064,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.co^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900065,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.cu^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900066,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.cy^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900067,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.do^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900068,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ec^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900069,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.eg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900070,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.et^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900071,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.fj^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900072,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.gh^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900073,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.gi^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900074,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.gt^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900075,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.hk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900076,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.jm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900077,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.kh^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900078,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.kw^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900079,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.lb^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900080,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ly^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900081,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.mm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900082,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.mt^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900083,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.mx^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900084,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.my^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900085,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.na^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900086,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.nf^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900087,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ng^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900088,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ni^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900089,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.np^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900090,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.om^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900091,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.pa^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900092,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.pe^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900093,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.pg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900094,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ph^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900095,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.pk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900096,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.pr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900097,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.py^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900098,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.qa^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900099,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.sa^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900100,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.sb^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900101,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.sg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900102,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.sl^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900103,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.sv^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900104,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.tj^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900105,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.tr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900106,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.tw^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900107,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.ua^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900108,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.uy^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900109,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.vc^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900110,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.com.vn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900111,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cv^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900112,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.cz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900113,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.de^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900114,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.dj^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900115,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.dk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900116,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.dm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900117,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.dz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900118,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ee^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900119,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.es^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900120,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.fi^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900121,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.fm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900122,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.fr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900123,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ga^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900124,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ge^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900125,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.gg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900126,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.gl^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900127,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.gm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900128,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.gp^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900129,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.gr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900130,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.gy^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900131,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.hn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900132,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.hr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900133,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ht^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900134,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.hu^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900135,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ie^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900136,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.im^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900137,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.iq^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900138,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.is^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900139,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.it^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900140,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.je^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900141,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.jo^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900142,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.kg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900143,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ki^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900144,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.kz^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900145,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.la^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900146,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.li^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900147,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.lk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900148,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.lt^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900149,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.lu^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900150,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.lv^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900151,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.md^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900152,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.me^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900153,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.mg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900154,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.mk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900155,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ml^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900156,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.mn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900157,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ms^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900158,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.mu^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900159,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.mv^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900160,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.mw^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900161,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ne^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900162,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.nl^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900163,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.no^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900164,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.nr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900165,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.nu^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900166,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.pl^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900167,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.pn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900168,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ps^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900169,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.pt^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900170,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ro^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900171,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.rs^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900172,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ru^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900173,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.rw^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900174,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.sc^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900175,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.se^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900176,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.sh^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900177,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.si^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900178,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.sk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900179,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.sm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900180,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.sn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900181,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.so^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900182,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.sr^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900183,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.st^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900184,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.td^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900185,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.tg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900186,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.tk^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900187,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.tl^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900188,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.tm^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900189,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.tn^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900190,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.to^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900191,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.tt^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900192,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.vg^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900193,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.vu^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900194,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||google.ws^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900195,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.google.com/safe-search?utm_source=puresignal"
+      }
+    },
+    "condition": {
+      "urlFilter": "||www.google.com^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900196,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.youtube.com/?persist_gl=1&safe=active"
+      }
+    },
+    "condition": {
+      "urlFilter": "||www.youtube.com^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900197,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://www.youtube.com/?persist_gl=1&safe=active"
+      }
+    },
+    "condition": {
+      "urlFilter": "||youtube.com^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  },
+  {
+    "id": 900198,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "url": "https://duckduckgo.com/?kp=1"
+      }
+    },
+    "condition": {
+      "urlFilter": "||duckduckgo.com^",
+      "resourceTypes": [
+        "main_frame"
+      ]
+    }
+  }
+]

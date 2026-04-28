@@ -2,3 +2,4 @@ merged
 *_clean
 sources
 scripts/pull.sh
+extension/rules/blocklist_core_*.json
