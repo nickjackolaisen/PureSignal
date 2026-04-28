@@ -4,3 +4,6 @@ export const SESSION_COOKIE_NAME = process.env.SESSION_COOKIE_NAME || "ps_sessio
 export const SESSION_TTL_SECONDS = Number(process.env.SESSION_TTL_SECONDS || 60 * 60 * 24 * 7);
 export const AUTH_MODE = process.env.AUTH_MODE || "demo";
 export const AUTH_SESSION_SECRET = process.env.AUTH_SESSION_SECRET || "local-dev-auth-secret";
+
+/** Canonical site URL for Stripe success/cancel redirects */
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://puresignal.io";
