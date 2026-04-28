@@ -1,6 +1,6 @@
 import "dotenv/config";
 import cors from "cors";
-import express from "express";
+import express, { type Request, type Response } from "express";
 import Stripe from "stripe";
 import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
@@ -80,7 +80,7 @@ function resolvePriceId(planCode: "ext_pro" | "desktop_pro" | "bundle_pro", inte
   return value || null;
 }
 
-app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async (req: Request, res: Response) => {
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
     res.status(200).json({ ok: true, ignored: true });
     return;
@@ -170,11 +170,11 @@ app.post("/v1/billing/webhook", express.raw({ type: "application/json" }), async
 
 app.use(express.json({ limit: "1mb" }));
 
-app.get("/health", (_req, res) => {
+app.get("/health", (_req: Request, res: Response) => {
   res.json({ ok: true, service: "platform-api" });
 });
 
-app.get("/v1/status", async (_req, res) => {
+app.get("/v1/status", async (_req: Request, res: Response) => {
   const latestRelease = await prisma.blocklistRelease.findFirst({
     orderBy: { publishedAt: "desc" }
   });
@@ -186,7 +186,7 @@ app.get("/v1/status", async (_req, res) => {
   });
 });
 
-app.get("/v1/billing/config", (_req, res) => {
+app.get("/v1/billing/config", (_req: Request, res: Response) => {
   res.json({
     pricesConfigured: {
       ext_pro: {
@@ -205,7 +205,7 @@ app.get("/v1/billing/config", (_req, res) => {
   });
 });
 
-app.post("/v1/devices/register", async (req, res) => {
+app.post("/v1/devices/register", async (req: Request, res: Response) => {
   const payload = deviceRegisterSchema.parse(req.body);
   const device = await prisma.device.create({
     data: {
@@ -220,7 +220,7 @@ app.post("/v1/devices/register", async (req, res) => {
   res.status(201).json({ deviceId: device.id, refreshToken: `dev_${device.id}` });
 });
 
-app.get("/v1/entitlements", async (req, res) => {
+app.get("/v1/entitlements", async (req: Request, res: Response) => {
   const userId = String(req.query.userId || "");
   if (!userId) {
     res.status(400).json({ error: "userId is required" });
@@ -233,7 +233,7 @@ app.get("/v1/entitlements", async (req, res) => {
   res.json({ planCode, flags });
 });
 
-app.get("/v1/blocklist/manifest", async (_req, res) => {
+app.get("/v1/blocklist/manifest", async (_req: Request, res: Response) => {
   const release = await prisma.blocklistRelease.findFirst({ orderBy: { publishedAt: "desc" } });
   if (!release) {
     res.status(404).json({ error: "No blocklist release published" });
@@ -248,7 +248,7 @@ app.get("/v1/blocklist/manifest", async (_req, res) => {
   });
 });
 
-app.post("/v1/alerts", async (req, res) => {
+app.post("/v1/alerts", async (req: Request, res: Response) => {
   const payload = alertsSchema.parse(req.body);
   const subscription = await prisma.subscription.findFirst({ where: { userId: payload.userId } });
   const planCode = normalizePlanCode(subscription?.planCode || "free");
@@ -268,7 +268,7 @@ app.post("/v1/alerts", async (req, res) => {
   res.status(202).json({ ok: true, eventId: event.id });
 });
 
-app.post("/v1/telemetry", async (req, res) => {
+app.post("/v1/telemetry", async (req: Request, res: Response) => {
   const payload = telemetrySchema.parse(req.body);
   await prisma.adminAuditLog.create({
     data: {
@@ -281,7 +281,7 @@ app.post("/v1/telemetry", async (req, res) => {
   res.status(202).json({ ok: true });
 });
 
-app.post("/v1/billing/create-checkout", async (req, res) => {
+app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
   const payload = checkoutSchema.parse(req.body);
   const priceId = resolvePriceId(payload.planCode, payload.interval);
   if (!priceId) {
@@ -303,7 +303,7 @@ app.post("/v1/billing/create-checkout", async (req, res) => {
   res.json({ checkoutUrl: session.url });
 });
 
-app.post("/v1/billing/create-portal", async (req, res) => {
+app.post("/v1/billing/create-portal", async (req: Request, res: Response) => {
   const payload = z.object({ customerId: z.string().min(1), returnUrl: z.string().url() }).parse(req.body);
   const portal = await stripe.billingPortal.sessions.create({
     customer: payload.customerId,
@@ -312,18 +312,18 @@ app.post("/v1/billing/create-portal", async (req, res) => {
   res.json({ portalUrl: portal.url });
 });
 
-app.get("/v1/admin/users", async (_req, res) => {
+app.get("/v1/admin/users", async (_req: Request, res: Response) => {
   const users = await prisma.user.findMany({ take: 100, orderBy: { createdAt: "desc" } });
   res.json(users);
 });
 
-app.post("/v1/support/contact", async (req, res) => {
+app.post("/v1/support/contact", async (req: Request, res: Response) => {
   const payload = z.object({ email: z.string().email(), message: z.string().min(5) }).parse(req.body);
   const message = await prisma.contactMessage.create({ data: payload });
   res.status(201).json({ ok: true, id: message.id });
 });
 
-app.post("/v1/support/report-site", async (req, res) => {
+app.post("/v1/support/report-site", async (req: Request, res: Response) => {
   const payload = z
     .object({
       email: z.string().email(),
