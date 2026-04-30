@@ -121,6 +121,11 @@ const checkoutSchema = z.object({
   cancelUrl: z.string().url()
 });
 
+const syncCheckoutSessionSchema = z.object({
+  sessionId: z.string().min(8),
+  userId: z.string().min(1)
+});
+
 /** Map client/billing quirks to canonical plan codes used for Stripe prices and metadata. */
 function normalizeCheckoutPlanCode(raw: string): "ext_pro" | "desktop_pro" | "bundle_pro" | null {
   const k = raw.trim().toLowerCase();
@@ -162,6 +167,16 @@ function payloadForStripeVerify(req: Request): Buffer | string {
   throw new Error("Webhook body must be raw Buffer (register this route before express.json())");
 }
 
+/** Stripe object references in API responses may be string id or expanded object */
+function stripeRefId(value: unknown): string {
+  if (value == null) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "object" && value !== null && "id" in value && typeof (value as { id: unknown }).id === "string") {
+    return (value as { id: string }).id;
+  }
+  return "";
+}
+
 /** Subscription.userId is an FK to User — ensure row exists before subscription upsert */
 async function ensureUserExistsForStripe(userId: string) {
   const safeEmailLocal = userId.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 96) || "user";
@@ -176,43 +191,81 @@ async function ensureUserExistsForStripe(userId: string) {
   });
 }
 
+/**
+ * Apply a completed Checkout Session to Subscription + Entitlement (webhook + manual sync).
+ * Resolves customer id from session or subscription when Stripe omits `customer` on the session.
+ */
+async function applyCheckoutSessionCompleted(
+  session: Stripe.Checkout.Session
+): Promise<{ ok: true } | { ok: false; reason: string }> {
+  const userId = String(session.client_reference_id || "").trim();
+  if (!userId) {
+    return { ok: false, reason: "missing client_reference_id" };
+  }
+
+  let customerId = stripeRefId(session.customer);
+  const subRef = stripeRefId(session.subscription);
+
+  if (!customerId && subRef) {
+    try {
+      const sub = await stripe.subscriptions.retrieve(subRef);
+      customerId = stripeRefId(sub.customer);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { ok: false, reason: `could not load subscription: ${msg}` };
+    }
+  }
+
+  if (!customerId) {
+    return { ok: false, reason: "missing Stripe customer id on session" };
+  }
+
+  if (session.status !== "complete") {
+    return { ok: false, reason: `checkout session status is ${session.status}` };
+  }
+
+  const planCode = normalizePlanCode(
+    String(session.metadata?.plan_code || session.metadata?.planCode || "free")
+  );
+
+  await ensureUserExistsForStripe(userId);
+  await prisma.subscription.upsert({
+    where: { stripeCustomerId: customerId },
+    update: { status: "active", planCode },
+    create: {
+      userId,
+      stripeCustomerId: customerId,
+      status: "active",
+      planCode
+    }
+  });
+  await prisma.entitlement.upsert({
+    where: { id: `ent_${userId}` },
+    update: { planCode, flags: PLAN_FLAGS[planCode] },
+    create: {
+      id: `ent_${userId}`,
+      scopeType: "user",
+      scopeId: userId,
+      planCode,
+      flags: PLAN_FLAGS[planCode]
+    }
+  });
+  return { ok: true };
+}
+
 async function handleStripeWebhookEvent(event: Stripe.Event) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const userId = String(session.client_reference_id || "");
-    const customerId = String(session.customer || "");
-    const planCode = normalizePlanCode(
-      String(session.metadata?.plan_code || session.metadata?.planCode || "free")
-    );
-    if (userId && customerId) {
-      await ensureUserExistsForStripe(userId);
-      await prisma.subscription.upsert({
-        where: { stripeCustomerId: customerId },
-        update: { status: "active", planCode },
-        create: {
-          userId,
-          stripeCustomerId: customerId,
-          status: "active",
-          planCode
-        }
-      });
-      await prisma.entitlement.upsert({
-        where: { id: `ent_${userId}` },
-        update: { planCode, flags: PLAN_FLAGS[planCode] },
-        create: {
-          id: `ent_${userId}`,
-          scopeType: "user",
-          scopeId: userId,
-          planCode,
-          flags: PLAN_FLAGS[planCode]
-        }
-      });
+    const result = await applyCheckoutSessionCompleted(session);
+    if (!result.ok) {
+      // eslint-disable-next-line no-console
+      console.warn("checkout.session.completed not applied:", result.reason, { sessionId: session.id });
     }
   }
 
   if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
     const subscription = event.data.object as Stripe.Subscription;
-    const customerId = String(subscription.customer || "");
+    const customerId = stripeRefId(subscription.customer);
     const status = subscription.status;
     const metadataPlan = normalizePlanCode(String(subscription.metadata?.plan_code || "free"));
     const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
@@ -239,7 +292,7 @@ async function handleStripeWebhookEvent(event: Stripe.Event) {
 
   if (event.type === "invoice.payment_failed") {
     const invoice = event.data.object as Stripe.Invoice;
-    const customerId = String(invoice.customer || "");
+    const customerId = stripeRefId(invoice.customer);
     const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
     if (existing) {
       await prisma.subscription.update({
@@ -474,7 +527,15 @@ app.post("/v1/telemetry", async (req: Request, res: Response) => {
 });
 
 app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
-  const body = checkoutSchema.parse(req.body);
+  const parsed = checkoutSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({
+      error: "Invalid checkout request",
+      details: parsed.error.flatten().fieldErrors
+    });
+    return;
+  }
+  const body = parsed.data;
   const planCode = normalizeCheckoutPlanCode(body.planCode);
   const interval = normalizeCheckoutInterval(body.interval);
 
@@ -529,6 +590,36 @@ app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
               ? "Check STRIPE_SECRET_KEY on the server (must be sk_test_… for test Checkout)."
               : undefined
       });
+      return;
+    }
+    throw err;
+  }
+});
+
+app.post("/v1/billing/sync-checkout-session", async (req: Request, res: Response) => {
+  const parsed = syncCheckoutSessionSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid body", details: parsed.error.flatten().fieldErrors });
+    return;
+  }
+  const { sessionId, userId } = parsed.data;
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["customer", "subscription"]
+    });
+    if (String(session.client_reference_id || "").trim() !== userId.trim()) {
+      res.status(403).json({ error: "Checkout session does not match this account" });
+      return;
+    }
+    const result = await applyCheckoutSessionCompleted(session);
+    if (!result.ok) {
+      res.status(400).json({ error: result.reason });
+      return;
+    }
+    res.json({ ok: true });
+  } catch (err: unknown) {
+    if (err instanceof Stripe.errors.StripeError) {
+      res.status(400).json({ error: err.message });
       return;
     }
     throw err;

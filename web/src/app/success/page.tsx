@@ -1,26 +1,17 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SuccessClient } from "./success-client";
 
 export const metadata: Metadata = {
-  title: "Pricing — PureSignal",
-  description:
-    "Choose Chrome Pro, Desktop Pro, or Bundle. Block 12.5 million adult domains with subscription pricing via Stripe."
+  title: "Thank you — PureSignal",
+  description: "Your Stripe checkout completed. We are linking your subscription to your account."
 };
 
-export default function SuccessPage() {
-  return (
-    <section style={{ textAlign: "center", padding: "3rem 1rem", maxWidth: "32rem", margin: "0 auto" }}>
-      <h2>You&apos;re nearly there</h2>
-      <p className="muted">
-        Stripe will confirm payment in a few seconds. Once your subscription is active, sign in here with the same
-        account — your entitlements sync automatically from our API.
-      </p>
-      <p style={{ marginTop: "1.5rem" }}>
-        <Link href="/dashboard">Go to Dashboard</Link>
-      </p>
-      <p className="muted" style={{ marginTop: "0.75rem", fontSize: "0.9rem" }}>
-        Questions? Visit <Link href="/support">support</Link>.
-      </p>
-    </section>
-  );
+export default async function SuccessPage({
+  searchParams
+}: {
+  searchParams: Promise<{ session_id?: string }>;
+}) {
+  const sp = await searchParams;
+  const sessionId = typeof sp.session_id === "string" && sp.session_id.startsWith("cs_") ? sp.session_id : null;
+  return <SuccessClient sessionId={sessionId} />;
 }

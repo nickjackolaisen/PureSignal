@@ -167,6 +167,7 @@ export default function PricingPage() {
           error?: string;
           message?: string;
           hint?: string;
+          details?: unknown;
         };
 
         if (res.status === 401) {
@@ -176,12 +177,16 @@ export default function PricingPage() {
         }
 
         if (!res.ok) {
+          const detailStr =
+            data.details !== undefined ? `\n\n${JSON.stringify(data.details)}` : "";
           const msg =
             typeof data.error === "string"
-              ? data.error
-              : "Checkout could not start. Price IDs may not be configured on the server.";
+              ? `${data.error}${detailStr}`
+              : typeof data.message === "string"
+                ? data.message
+                : `Checkout failed (HTTP ${res.status}). Check the Network tab for the full response.`;
           const hint = typeof data.hint === "string" ? data.hint : "";
-          console.error("Checkout error:", data);
+          console.error("Checkout error:", res.status, data);
           alert(hint ? `${msg}\n\n${hint}` : `Checkout error: ${msg}`);
           return;
         }
