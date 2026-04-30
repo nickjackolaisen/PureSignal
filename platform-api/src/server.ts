@@ -204,6 +204,9 @@ async function applyCheckoutSessionCompleted(
   }
 
   let customerId = stripeRefId(session.customer);
+  if (!customerId && session.subscription && typeof session.subscription === "object") {
+    customerId = stripeRefId((session.subscription as Stripe.Subscription).customer);
+  }
   const subRef = stripeRefId(session.subscription);
 
   if (!customerId && subRef) {
@@ -228,28 +231,35 @@ async function applyCheckoutSessionCompleted(
     String(session.metadata?.plan_code || session.metadata?.planCode || "free")
   );
 
-  await ensureUserExistsForStripe(userId);
-  await prisma.subscription.upsert({
-    where: { stripeCustomerId: customerId },
-    update: { status: "active", planCode },
-    create: {
-      userId,
-      stripeCustomerId: customerId,
-      status: "active",
-      planCode
-    }
-  });
-  await prisma.entitlement.upsert({
-    where: { id: `ent_${userId}` },
-    update: { planCode, flags: PLAN_FLAGS[planCode] },
-    create: {
-      id: `ent_${userId}`,
-      scopeType: "user",
-      scopeId: userId,
-      planCode,
-      flags: PLAN_FLAGS[planCode]
-    }
-  });
+  try {
+    await ensureUserExistsForStripe(userId);
+    await prisma.subscription.upsert({
+      where: { stripeCustomerId: customerId },
+      update: { status: "active", planCode, userId },
+      create: {
+        userId,
+        stripeCustomerId: customerId,
+        status: "active",
+        planCode
+      }
+    });
+    await prisma.entitlement.upsert({
+      where: { id: `ent_${userId}` },
+      update: { planCode, flags: PLAN_FLAGS[planCode] },
+      create: {
+        id: `ent_${userId}`,
+        scopeType: "user",
+        scopeId: userId,
+        planCode,
+        flags: PLAN_FLAGS[planCode]
+      }
+    });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    // eslint-disable-next-line no-console
+    console.error("applyCheckoutSessionCompleted db error:", msg);
+    return { ok: false, reason: `database error: ${msg}` };
+  }
   return { ok: true };
 }
 
@@ -597,13 +607,13 @@ app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
 });
 
 app.post("/v1/billing/sync-checkout-session", async (req: Request, res: Response) => {
-  const parsed = syncCheckoutSessionSchema.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: "Invalid body", details: parsed.error.flatten().fieldErrors });
-    return;
-  }
-  const { sessionId, userId } = parsed.data;
   try {
+    const parsed = syncCheckoutSessionSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: "Invalid body", details: parsed.error.flatten().fieldErrors });
+      return;
+    }
+    const { sessionId, userId } = parsed.data;
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["customer", "subscription"]
     });
@@ -622,7 +632,10 @@ app.post("/v1/billing/sync-checkout-session", async (req: Request, res: Response
       res.status(400).json({ error: err.message });
       return;
     }
-    throw err;
+    const msg = err instanceof Error ? err.message : String(err);
+    // eslint-disable-next-line no-console
+    console.error("sync-checkout-session failed:", err);
+    res.status(500).json({ error: msg });
   }
 });
 

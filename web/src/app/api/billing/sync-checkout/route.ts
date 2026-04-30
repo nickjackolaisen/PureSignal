@@ -3,9 +3,7 @@ import { NextResponse } from "next/server";
 import { API_BASE_URL, SESSION_COOKIE_NAME } from "../../../../lib/config";
 import { createUserId, parseSessionToken } from "../../../../lib/session";
 
-function apiBase(): string {
-  return API_BASE_URL.replace(/\/+$/, "").trim() || "http://localhost:8787";
-}
+export const maxDuration = 60;
 
 export async function POST(request: Request) {
   const token = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
@@ -28,7 +26,7 @@ export async function POST(request: Request) {
 
   const userId = createUserId(`${session.provider}:${session.sub}`);
 
-  const upstream = await fetch(`${apiBase()}/v1/billing/sync-checkout-session`, {
+  const upstream = await fetch(`${API_BASE_URL}/v1/billing/sync-checkout-session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sessionId, userId })

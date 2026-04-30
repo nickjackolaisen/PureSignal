@@ -66,7 +66,30 @@ export async function POST(request: Request) {
     clearTimeout(kill);
   }
 
-  const data = (await upstream.json().catch(() => ({}))) as Record<string, unknown>;
+  const raw = await upstream.text();
+  let data: Record<string, unknown> = {};
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        data = parsed as Record<string, unknown>;
+      }
+    } catch {
+      data = {
+        error: `Platform returned ${upstream.status} (not JSON). First bytes: ${raw.slice(0, 280).replace(/\s+/g, " ")}`
+      };
+    }
+  }
+
+  if (!upstream.ok && typeof data.error !== "string") {
+    const fallback =
+      typeof data.message === "string"
+        ? data.message
+        : raw
+          ? `Platform HTTP ${upstream.status}`
+          : `Platform HTTP ${upstream.status} (empty body)`;
+    data = { ...data, error: fallback };
+  }
 
   return NextResponse.json(data, {
     status: upstream.status,
