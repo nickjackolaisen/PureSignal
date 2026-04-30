@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import { API_BASE_URL, SESSION_COOKIE_NAME, SITE_URL } from "../../../../lib/config";
 import { createUserId, parseSessionToken } from "../../../../lib/session";
 
-const PLANS = new Set(["ext_pro", "desktop_pro", "bundle_pro"]);
-const INTERVALS = new Set(["monthly", "annual"]);
+const PLANS = new Set(["chrome", "ext_pro", "desktop", "desktop_pro", "bundle", "bundle_pro"]);
+const INTERVALS = new Set(["monthly", "annual", "year"]);
 
 export async function POST(request: Request) {
   const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
