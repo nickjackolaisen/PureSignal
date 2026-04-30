@@ -320,8 +320,24 @@ app.post(
 
 app.use(express.json({ limit: "1mb" }));
 
+function stripeSecretKeyMode(): "test" | "live" | "unset" {
+  const sk = process.env.STRIPE_SECRET_KEY?.trim() || "";
+  if (sk.startsWith("sk_test_")) return "test";
+  if (sk.startsWith("sk_live_")) return "live";
+  return "unset";
+}
+
 app.get("/health", (_req: Request, res: Response) => {
-  res.json({ ok: true, service: "platform-api" });
+  res.json({
+    ok: true,
+    service: "platform-api",
+    stripe: {
+      /** Mode implied by STRIPE_SECRET_KEY (this is what Checkout uses). */
+      secretKeyMode: stripeSecretKeyMode(),
+      /** Price env + webhook secret selection (STRIPE_SANDBOX or sk_test_). */
+      priceAndWebhookMode: stripeIsTestMode() ? "test" : "live"
+    }
+  });
 });
 
 // Temporary debug route
