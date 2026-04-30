@@ -85,20 +85,30 @@ export default function PricingPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/dashboard")
+    fetch("/api/auth/session", { credentials: "include" })
       .then(async (response) => {
-        if (!response.ok) {
-          if (cancelled) return;
+        if (cancelled) return;
+        if (response.status === 401) {
           setSignedIn(false);
           setUserEmail(null);
           return;
         }
-        const json = (await response.json()) as {
-          user?: { email?: string };
+        const json = (await response.json().catch(() => ({}))) as {
+          signedIn?: boolean;
+          email?: string;
         };
-        if (cancelled) return;
-        setSignedIn(true);
-        setUserEmail(typeof json?.user?.email === "string" ? json.user.email : null);
+        if (!response.ok) {
+          setSignedIn(false);
+          setUserEmail(null);
+          return;
+        }
+        if (json.signedIn === true && typeof json.email === "string") {
+          setSignedIn(true);
+          setUserEmail(json.email);
+        } else {
+          setSignedIn(false);
+          setUserEmail(null);
+        }
       })
       .catch(() => {
         if (!cancelled) setSignedIn(false);
@@ -112,8 +122,12 @@ export default function PricingPage() {
   const handleSubscribe = useCallback(
     async (planCode: string) => {
       setFatal(null);
-      if (signedIn === false) {
-        setFatal("Please sign in on the home page before subscribing.");
+      if (signedIn !== true) {
+        if (signedIn === null) {
+          setFatal("Still checking sign-in — wait a moment, then try again.");
+        } else {
+          setFatal("Please sign in on the home page before subscribing.");
+        }
         return;
       }
 
