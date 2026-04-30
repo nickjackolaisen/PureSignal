@@ -6,6 +6,7 @@ type DashboardState = {
   user: { email: string; userId: string; provider?: string };
   entitlements: { planCode: string; flags: Record<string, boolean> };
   platformStatus: { blocklistVersion?: string; publishedAt?: string };
+  notice?: string;
 };
 
 export function DashboardClient() {
@@ -38,6 +39,7 @@ export function DashboardClient() {
 
   return (
     <>
+      {data.notice ? <p className="muted">{data.notice}</p> : null}
       <p>
         Signed in as <strong>{data.user.email}</strong>
       </p>

@@ -268,6 +268,82 @@ async function applyCheckoutSessionCompleted(
   return { ok: true };
 }
 
+/** Stripe subscription statuses that keep paid plan features (not necessarily "active" only). */
+function planCodeForSubscriptionStatus(status: Stripe.Subscription.Status, metadataPlan: string): string {
+  const paidLike = status === "active" || status === "trialing" || status === "past_due";
+  return paidLike ? metadataPlan : "free";
+}
+
+/**
+ * Resolve app user id for a Stripe subscription: existing DB row, subscription metadata
+ * (set from checkout), or Checkout Session client_reference_id (backfill when checkout
+ * webhook failed before DB row existed).
+ */
+async function resolveUserIdForStripeSubscription(
+  subscription: Stripe.Subscription,
+  existingUserId: string | undefined
+): Promise<string> {
+  if (existingUserId) return existingUserId;
+  const fromMeta = String(subscription.metadata?.user_id || "").trim();
+  if (fromMeta) return fromMeta;
+  try {
+    const sessions = await stripe.checkout.sessions.list({ subscription: subscription.id, limit: 1 });
+    const ref = sessions.data[0]?.client_reference_id;
+    if (ref && String(ref).trim()) return String(ref).trim();
+  } catch (e: unknown) {
+    // eslint-disable-next-line no-console
+    console.warn("subscription webhook: checkout.sessions.list failed", e);
+  }
+  return "";
+}
+
+async function syncSubscriptionFromStripeWebhook(subscription: Stripe.Subscription) {
+  const customerId = stripeRefId(subscription.customer);
+  if (!customerId) {
+    // eslint-disable-next-line no-console
+    console.warn("subscription webhook: missing customer id", subscription.id);
+    return;
+  }
+  const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
+  const userId = await resolveUserIdForStripeSubscription(subscription, existing?.userId);
+  if (!userId) {
+    // eslint-disable-next-line no-console
+    console.warn("subscription webhook: cannot resolve userId", {
+      customerId,
+      subscriptionId: subscription.id
+    });
+    return;
+  }
+  const metadataPlan = normalizePlanCode(String(subscription.metadata?.plan_code || "free"));
+  const status = subscription.status;
+  const planCode = planCodeForSubscriptionStatus(status, metadataPlan);
+  const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
+
+  await ensureUserExistsForStripe(userId);
+  await prisma.subscription.upsert({
+    where: { stripeCustomerId: customerId },
+    update: { status, planCode, userId, currentPeriodEnd },
+    create: {
+      userId,
+      stripeCustomerId: customerId,
+      status,
+      planCode,
+      currentPeriodEnd
+    }
+  });
+  await prisma.entitlement.upsert({
+    where: { id: `ent_${userId}` },
+    update: { planCode, flags: PLAN_FLAGS[planCode] },
+    create: {
+      id: `ent_${userId}`,
+      scopeType: "user",
+      scopeId: userId,
+      planCode,
+      flags: PLAN_FLAGS[planCode]
+    }
+  });
+}
+
 async function handleStripeWebhookEvent(event: Stripe.Event) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
@@ -278,31 +354,13 @@ async function handleStripeWebhookEvent(event: Stripe.Event) {
     }
   }
 
-  if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
+  if (
+    event.type === "customer.subscription.created" ||
+    event.type === "customer.subscription.updated" ||
+    event.type === "customer.subscription.deleted"
+  ) {
     const subscription = event.data.object as Stripe.Subscription;
-    const customerId = stripeRefId(subscription.customer);
-    const status = subscription.status;
-    const metadataPlan = normalizePlanCode(String(subscription.metadata?.plan_code || "free"));
-    const currentPeriodEnd = subscription.current_period_end ? new Date(subscription.current_period_end * 1000) : null;
-    const existing = await prisma.subscription.findUnique({ where: { stripeCustomerId: customerId } });
-    if (existing) {
-      const planCode = status === "active" ? metadataPlan : "free";
-      await prisma.subscription.update({
-        where: { stripeCustomerId: customerId },
-        data: { status, planCode, currentPeriodEnd }
-      });
-      await prisma.entitlement.upsert({
-        where: { id: `ent_${existing.userId}` },
-        update: { planCode, flags: PLAN_FLAGS[planCode] },
-        create: {
-          id: `ent_${existing.userId}`,
-          scopeType: "user",
-          scopeId: existing.userId,
-          planCode,
-          flags: PLAN_FLAGS[planCode]
-        }
-      });
-    }
+    await syncSubscriptionFromStripeWebhook(subscription);
   }
 
   if (event.type === "invoice.payment_failed") {
@@ -363,6 +421,7 @@ app.post(
           console.log("Checkout session completed", session.id);
           break;
         }
+        case "customer.subscription.created":
         case "customer.subscription.updated":
         case "customer.subscription.deleted": {
           const sub = event.data.object as Stripe.Subscription;
@@ -582,7 +641,7 @@ app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
       cancel_url: body.cancelUrl,
       metadata: { plan_code: planCode },
       subscription_data: {
-        metadata: { plan_code: planCode }
+        metadata: { plan_code: planCode, user_id: body.userId }
       }
     });
     res.json({ checkoutUrl: session.url });
