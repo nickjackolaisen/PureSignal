@@ -27,5 +27,5 @@ jobs:
         working-directory: platform-api
         run: |
           npm install
-          npm run build
+          npm run build:ci
           npm run test
