@@ -148,6 +148,7 @@ export default function PricingPage() {
           url?: string | null;
           error?: string;
           message?: string;
+          hint?: string;
         };
 
         if (res.status === 401) {
@@ -161,8 +162,9 @@ export default function PricingPage() {
             typeof data.error === "string"
               ? data.error
               : "Checkout could not start. Price IDs may not be configured on the server.";
+          const hint = typeof data.hint === "string" ? data.hint : "";
           console.error("Checkout error:", data);
-          alert(`Checkout error: ${msg}`);
+          alert(hint ? `${msg}\n\n${hint}` : `Checkout error: ${msg}`);
           return;
         }
 

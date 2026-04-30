@@ -497,18 +497,42 @@ app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
     return;
   }
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "subscription",
-    client_reference_id: body.userId,
-    line_items: [{ price: priceId, quantity: 1 }],
-    success_url: body.successUrl,
-    cancel_url: body.cancelUrl,
-    metadata: { plan_code: planCode },
-    subscription_data: {
-      metadata: { plan_code: planCode }
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      client_reference_id: body.userId,
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: body.successUrl,
+      cancel_url: body.cancelUrl,
+      metadata: { plan_code: planCode },
+      subscription_data: {
+        metadata: { plan_code: planCode }
+      }
+    });
+    res.json({ checkoutUrl: session.url });
+  } catch (err: unknown) {
+    if (err instanceof Stripe.errors.StripeError) {
+      // eslint-disable-next-line no-console
+      console.error("Stripe checkout.sessions.create:", err.type, err.message, {
+        planCode,
+        interval,
+        priceIdPrefix: priceId.slice(0, 20)
+      });
+      res.status(400).json({
+        error: err.message,
+        stripeType: err.type,
+        stripeCode: err.code ?? undefined,
+        hint:
+          err.type === "StripeInvalidRequestError" && /no such price/i.test(err.message)
+            ? "Use Test mode price IDs (price_…) from the same Stripe account with sk_test_…; set STRIPE_PRICE_*_TEST on the server or replace live price env vars with test prices."
+            : err.type === "StripeAuthenticationError"
+              ? "Check STRIPE_SECRET_KEY on the server (must be sk_test_… for test Checkout)."
+              : undefined
+      });
+      return;
     }
-  });
-  res.json({ checkoutUrl: session.url });
+    throw err;
+  }
 });
 
 app.post("/v1/billing/create-portal", async (req: Request, res: Response) => {
