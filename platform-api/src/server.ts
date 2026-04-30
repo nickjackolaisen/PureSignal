@@ -15,22 +15,65 @@ const allowedOrigins = String(process.env.CORS_ALLOWED_ORIGINS || "")
   .map((value) => value.trim())
   .filter(Boolean);
 
-const PLAN_PRICE_ENV: Record<"ext_pro" | "desktop_pro" | "bundle_pro", { monthly: string; annual: string }> = {
-  ext_pro: {
-    monthly: process.env.STRIPE_PRICE_EXT_PRO_MONTHLY || "",
-    annual:
-      process.env.STRIPE_PRICE_EXT_PRO_YEARLY || process.env.STRIPE_PRICE_EXT_PRO_ANNUAL || ""
-  },
-  desktop_pro: {
-    monthly: process.env.STRIPE_PRICE_DESKTOP_PRO_MONTHLY || "",
-    annual:
-      process.env.STRIPE_PRICE_DESKTOP_PRO_YEARLY || process.env.STRIPE_PRICE_DESKTOP_PRO_ANNUAL || ""
-  },
-  bundle_pro: {
-    monthly: process.env.STRIPE_PRICE_BUNDLE_PRO_MONTHLY || "",
-    annual:
-      process.env.STRIPE_PRICE_BUNDLE_PRO_YEARLY || process.env.STRIPE_PRICE_BUNDLE_PRO_ANNUAL || ""
+/** Test mode: STRIPE_SANDBOX=true forces test prices; else infer from sk_test_ secret. */
+function stripeIsTestMode(): boolean {
+  const override = process.env.STRIPE_SANDBOX?.trim().toLowerCase();
+  if (override === "true" || override === "1") return true;
+  if (override === "false" || override === "0") return false;
+  const sk = process.env.STRIPE_SECRET_KEY?.trim() || "";
+  return sk.startsWith("sk_test_");
+}
+
+function firstEnv(...keys: string[]): string {
+  for (const key of keys) {
+    const v = process.env[key]?.trim();
+    if (v) return v;
   }
+  return "";
+}
+
+/** Resolve monthly/yearly Stripe price IDs for live vs sandbox (__TEST) vars. */
+function planPriceRowFromEnv(
+  testMonthly: string,
+  testYearly: string,
+  liveMonthly: string,
+  liveYearly: string,
+  liveAnnualLegacy: string
+): { monthly: string; annual: string } {
+  if (stripeIsTestMode()) {
+    return {
+      monthly: firstEnv(testMonthly, liveMonthly),
+      annual: firstEnv(testYearly, liveYearly, liveAnnualLegacy)
+    };
+  }
+  return {
+    monthly: firstEnv(liveMonthly, testMonthly),
+    annual: firstEnv(liveYearly, liveAnnualLegacy, testYearly)
+  };
+}
+
+const PLAN_PRICE_ENV: Record<"ext_pro" | "desktop_pro" | "bundle_pro", { monthly: string; annual: string }> = {
+  ext_pro: planPriceRowFromEnv(
+    "STRIPE_PRICE_EXT_PRO_MONTHLY_TEST",
+    "STRIPE_PRICE_EXT_PRO_YEARLY_TEST",
+    "STRIPE_PRICE_EXT_PRO_MONTHLY",
+    "STRIPE_PRICE_EXT_PRO_YEARLY",
+    "STRIPE_PRICE_EXT_PRO_ANNUAL"
+  ),
+  desktop_pro: planPriceRowFromEnv(
+    "STRIPE_PRICE_DESKTOP_PRO_MONTHLY_TEST",
+    "STRIPE_PRICE_DESKTOP_PRO_YEARLY_TEST",
+    "STRIPE_PRICE_DESKTOP_PRO_MONTHLY",
+    "STRIPE_PRICE_DESKTOP_PRO_YEARLY",
+    "STRIPE_PRICE_DESKTOP_PRO_ANNUAL"
+  ),
+  bundle_pro: planPriceRowFromEnv(
+    "STRIPE_PRICE_BUNDLE_PRO_MONTHLY_TEST",
+    "STRIPE_PRICE_BUNDLE_PRO_YEARLY_TEST",
+    "STRIPE_PRICE_BUNDLE_PRO_MONTHLY",
+    "STRIPE_PRICE_BUNDLE_PRO_YEARLY",
+    "STRIPE_PRICE_BUNDLE_PRO_ANNUAL"
+  )
 };
 
 app.use(
@@ -275,15 +318,26 @@ app.get("/health", (_req: Request, res: Response) => {
 
 // Temporary debug route
 app.get("/debug/prices", (_req: Request, res: Response) => {
+  const test = stripeIsTestMode();
   res.json({
     message: "Price IDs loaded on server",
-    prices: {
-      EXT_PRO_MONTHLY: process.env.STRIPE_PRICE_EXT_PRO_MONTHLY,
-      EXT_PRO_YEARLY: process.env.STRIPE_PRICE_EXT_PRO_YEARLY,
-      DESKTOP_PRO_MONTHLY: process.env.STRIPE_PRICE_DESKTOP_PRO_MONTHLY,
-      DESKTOP_PRO_YEARLY: process.env.STRIPE_PRICE_DESKTOP_PRO_YEARLY,
-      BUNDLE_PRO_MONTHLY: process.env.STRIPE_PRICE_BUNDLE_PRO_MONTHLY,
-      BUNDLE_PRO_YEARLY: process.env.STRIPE_PRICE_BUNDLE_PRO_YEARLY
+    stripeMode: test ? "test" : "live",
+    resolvedCheckoutPrices: {
+      ext_pro: PLAN_PRICE_ENV.ext_pro,
+      desktop_pro: PLAN_PRICE_ENV.desktop_pro,
+      bundle_pro: PLAN_PRICE_ENV.bundle_pro
+    },
+    env: {
+      STRIPE_SANDBOX: process.env.STRIPE_SANDBOX ?? null,
+      secretPrefix: (process.env.STRIPE_SECRET_KEY || "").slice(0, 12) || null,
+      EXT_PRO_MONTHLY_TEST: process.env.STRIPE_PRICE_EXT_PRO_MONTHLY_TEST ?? null,
+      EXT_PRO_YEARLY_TEST: process.env.STRIPE_PRICE_EXT_PRO_YEARLY_TEST ?? null,
+      EXT_PRO_MONTHLY: process.env.STRIPE_PRICE_EXT_PRO_MONTHLY ?? null,
+      EXT_PRO_YEARLY: process.env.STRIPE_PRICE_EXT_PRO_YEARLY ?? null,
+      DESKTOP_PRO_MONTHLY_TEST: process.env.STRIPE_PRICE_DESKTOP_PRO_MONTHLY_TEST ?? null,
+      DESKTOP_PRO_YEARLY_TEST: process.env.STRIPE_PRICE_DESKTOP_PRO_YEARLY_TEST ?? null,
+      BUNDLE_PRO_MONTHLY_TEST: process.env.STRIPE_PRICE_BUNDLE_PRO_MONTHLY_TEST ?? null,
+      BUNDLE_PRO_YEARLY_TEST: process.env.STRIPE_PRICE_BUNDLE_PRO_YEARLY_TEST ?? null
     }
   });
 });
@@ -409,28 +463,12 @@ app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
     return;
   }
 
-  let priceId: string | undefined;
-
-  if (planCode === "ext_pro") {
-    priceId =
-      interval === "annual"
-        ? process.env.STRIPE_PRICE_EXT_PRO_YEARLY || process.env.STRIPE_PRICE_EXT_PRO_ANNUAL
-        : process.env.STRIPE_PRICE_EXT_PRO_MONTHLY;
-  } else if (planCode === "desktop_pro") {
-    priceId =
-      interval === "annual"
-        ? process.env.STRIPE_PRICE_DESKTOP_PRO_YEARLY || process.env.STRIPE_PRICE_DESKTOP_PRO_ANNUAL
-        : process.env.STRIPE_PRICE_DESKTOP_PRO_MONTHLY;
-  } else if (planCode === "bundle_pro") {
-    priceId =
-      interval === "annual"
-        ? process.env.STRIPE_PRICE_BUNDLE_PRO_YEARLY || process.env.STRIPE_PRICE_BUNDLE_PRO_ANNUAL
-        : process.env.STRIPE_PRICE_BUNDLE_PRO_MONTHLY;
-  }
+  const row = PLAN_PRICE_ENV[planCode];
+  const priceId = interval === "annual" ? row.annual : row.monthly;
 
   if (!priceId) {
     res.status(400).json({
-      error: `Price not configured for ${planCode}:${interval}`
+      error: `Price not configured for ${planCode}:${interval} (mode: ${stripeIsTestMode() ? "test" : "live"})`
     });
     return;
   }
