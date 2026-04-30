@@ -684,8 +684,8 @@ function warnIfSupabaseDirectHostFromRender() {
     // eslint-disable-next-line no-console
     console.warn(
       "\n[puresignal-api] DATABASE_URL points at Supabase direct DB (db.*.supabase.co).\n" +
-        "Render usually cannot connect (IPv4 vs IPv6). Replace with the Transaction pooler URI from\n" +
-        "Supabase Dashboard → Connect → Transaction pooler (port 6543). Resume DB if paused.\n"
+        "Render often cannot reach it (IPv4 vs IPv6). Use Supabase Connect → Session pooler\n" +
+        "(port 5432, *.pooler.supabase.com) so Prisma migrate and the app both work.\n"
     );
   }
 }
