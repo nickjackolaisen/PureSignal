@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import { API_BASE_URL, SESSION_COOKIE_NAME, SITE_URL } from "../../../../lib/config";
 import { createUserId, parseSessionToken } from "../../../../lib/session";
 
+/** Vercel: allow long enough for platform-api cold start (requires Pro+ for >10s). */
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
   const session = parseSessionToken(sessionToken);
@@ -33,17 +36,35 @@ export async function POST(request: Request) {
   let successUrl = typeof body.successUrl === "string" && body.successUrl.trim().startsWith("http") ? body.successUrl : successUrlDefault;
   let cancelUrl = typeof body.cancelUrl === "string" && body.cancelUrl.trim().startsWith("http") ? body.cancelUrl : cancelUrlDefault;
 
-  const upstream = await fetch(`${API_BASE_URL}/v1/billing/create-checkout`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      userId,
-      planCode,
-      interval,
-      successUrl,
-      cancelUrl
-    })
-  });
+  const controller = new AbortController();
+  const kill = setTimeout(() => controller.abort(), 58_000);
+  let upstream: Response;
+  try {
+    upstream = await fetch(`${API_BASE_URL}/v1/billing/create-checkout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId,
+        planCode,
+        interval,
+        successUrl,
+        cancelUrl
+      }),
+      signal: controller.signal
+    });
+  } catch (err) {
+    const timedOut = err instanceof Error && err.name === "AbortError";
+    return NextResponse.json(
+      {
+        error: timedOut
+          ? "Checkout service took too long to respond. Try again in a few seconds, or upgrade hosting so the API stays warm."
+          : "Could not reach checkout service."
+      },
+      { status: 503 }
+    );
+  } finally {
+    clearTimeout(kill);
+  }
 
   const data = (await upstream.json().catch(() => ({}))) as Record<string, unknown>;
 

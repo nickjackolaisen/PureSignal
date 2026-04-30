@@ -84,6 +84,10 @@ export default function PricingPage() {
   const [fatal, setFatal] = useState<string | null>(null);
 
   useEffect(() => {
+    void fetch("/api/platform/warm").catch(() => {});
+  }, []);
+
+  useEffect(() => {
     let cancelled = false;
     fetch("/api/auth/session", { credentials: "include" })
       .then(async (response) => {
