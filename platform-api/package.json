@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "prisma generate && tsc -p tsconfig.json",
+    "build": "prisma generate && prisma migrate deploy && tsc -p tsconfig.json",
+    "prisma:migrate": "prisma migrate deploy",
     "start": "node dist/server.js",
     "test": "node --test dist/entitlements.test.js",
     "prisma:generate": "prisma generate"
