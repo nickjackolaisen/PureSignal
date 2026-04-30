@@ -258,7 +258,12 @@ async function applyCheckoutSessionCompleted(
     const msg = e instanceof Error ? e.message : String(e);
     // eslint-disable-next-line no-console
     console.error("applyCheckoutSessionCompleted db error:", msg);
-    return { ok: false, reason: `database error: ${msg}` };
+    let reason = `database error: ${msg}`;
+    if (/Can't reach database server|P1001/i.test(msg) || /db\..*\.supabase\.co:?5432/i.test(msg)) {
+      reason +=
+        " Fix: In Supabase → Connect → use Transaction pooler URI (port 6543, pooler host). Set that as DATABASE_URL on Render — direct db.*.supabase.co:5432 often fails from IPv4-only hosts.";
+    }
+    return { ok: false, reason };
   }
   return { ok: true };
 }
@@ -671,7 +676,22 @@ app.post("/v1/support/report-site", async (req: Request, res: Response) => {
   res.status(201).json({ ok: true, id: report.id });
 });
 
+function warnIfSupabaseDirectHostFromRender() {
+  const u = process.env.DATABASE_URL || "";
+  if (!/supabase\.co/i.test(u)) return;
+  if (/pooler\.supabase\.com|:\s*6543|pgbouncer=true/i.test(u)) return;
+  if (/db\.[a-z0-9-]+\.supabase\.co/i.test(u)) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "\n[puresignal-api] DATABASE_URL points at Supabase direct DB (db.*.supabase.co).\n" +
+        "Render usually cannot connect (IPv4 vs IPv6). Replace with the Transaction pooler URI from\n" +
+        "Supabase Dashboard → Connect → Transaction pooler (port 6543). Resume DB if paused.\n"
+    );
+  }
+}
+
 app.listen(port, () => {
+  warnIfSupabaseDirectHostFromRender();
   // eslint-disable-next-line no-console
   console.log(`PureSignal platform API running on ${port}`);
 });
