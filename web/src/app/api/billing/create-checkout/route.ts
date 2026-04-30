@@ -1,12 +1,18 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { API_BASE_URL, SESSION_COOKIE_NAME, SITE_URL } from "../../../../lib/config";
+import { fetchWithGatewayRetry, vercelPlatformApiMisconfigMessage } from "../../../../lib/platform-upstream";
 import { createUserId, parseSessionToken } from "../../../../lib/session";
 
 /** Vercel: allow long enough for platform-api cold start (requires Pro+ for >10s). */
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
+  const cfgErr = vercelPlatformApiMisconfigMessage();
+  if (cfgErr) {
+    return NextResponse.json({ error: cfgErr }, { status: 503 });
+  }
+
   const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
   const session = parseSessionToken(sessionToken);
   if (!session) {
@@ -38,20 +44,25 @@ export async function POST(request: Request) {
 
   const controller = new AbortController();
   const kill = setTimeout(() => controller.abort(), 58_000);
+  const payload = JSON.stringify({
+    userId,
+    planCode,
+    interval,
+    successUrl,
+    cancelUrl
+  });
   let upstream: Response;
   try {
-    upstream = await fetch(`${API_BASE_URL}/v1/billing/create-checkout`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId,
-        planCode,
-        interval,
-        successUrl,
-        cancelUrl
+    upstream = await fetchWithGatewayRetry(
+      `${API_BASE_URL}/v1/billing/create-checkout`,
+      () => ({
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+        signal: controller.signal
       }),
-      signal: controller.signal
-    });
+      { attempts: 3, pauseMs: 2500 }
+    );
   } catch (err) {
     const timedOut = err instanceof Error && err.name === "AbortError";
     return NextResponse.json(
@@ -87,7 +98,9 @@ export async function POST(request: Request) {
         ? data.message
         : raw
           ? `Platform HTTP ${upstream.status}`
-          : `Platform HTTP ${upstream.status} (empty body)`;
+          : upstream.status === 503 || upstream.status === 502
+            ? `Platform returned ${upstream.status} (empty). Render may be waking from sleep — try again in ~30 seconds, use /api/platform/warm first, or keep the API always-on.`
+            : `Platform HTTP ${upstream.status} (empty body)`;
     data = { ...data, error: fallback };
   }
 
