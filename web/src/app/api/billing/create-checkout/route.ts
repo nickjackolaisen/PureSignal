@@ -3,9 +3,6 @@ import { NextResponse } from "next/server";
 import { API_BASE_URL, SESSION_COOKIE_NAME, SITE_URL } from "../../../../lib/config";
 import { createUserId, parseSessionToken } from "../../../../lib/session";
 
-const PLANS = new Set(["chrome", "ext_pro", "desktop", "desktop_pro", "bundle", "bundle_pro"]);
-const INTERVALS = new Set(["monthly", "annual", "year"]);
-
 export async function POST(request: Request) {
   const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
   const session = parseSessionToken(sessionToken);
@@ -20,14 +17,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  const planCode = body.planCode;
-  const interval = body.interval;
+  const planCode = typeof body.planCode === "string" ? body.planCode.trim() : "";
+  const interval = typeof body.interval === "string" ? body.interval.trim() : "";
 
-  if (typeof planCode !== "string" || !PLANS.has(planCode)) {
-    return NextResponse.json({ error: "invalid_plan" }, { status: 400 });
-  }
-  if (typeof interval !== "string" || !INTERVALS.has(interval)) {
-    return NextResponse.json({ error: "invalid_interval" }, { status: 400 });
+  if (!planCode || !interval) {
+    return NextResponse.json({ error: "invalid_plan_or_interval" }, { status: 400 });
   }
 
   const userId = createUserId(`${session.provider}:${session.sub}`);

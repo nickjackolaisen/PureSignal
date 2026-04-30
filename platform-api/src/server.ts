@@ -72,18 +72,27 @@ const telemetrySchema = z.object({
 
 const checkoutSchema = z.object({
   userId: z.string().min(1),
-  planCode: z.enum(["chrome", "ext_pro", "desktop", "desktop_pro", "bundle", "bundle_pro"]),
-  interval: z.enum(["monthly", "annual", "year"]),
+  planCode: z.string().min(1),
+  interval: z.string().min(1),
   successUrl: z.string().url(),
   cancelUrl: z.string().url()
 });
 
-function canonicalPlanCodeForStripe(
-  planCode: z.infer<typeof checkoutSchema>["planCode"]
-): "ext_pro" | "desktop_pro" | "bundle_pro" {
-  if (planCode === "chrome" || planCode === "ext_pro") return "ext_pro";
-  if (planCode === "desktop" || planCode === "desktop_pro") return "desktop_pro";
-  return "bundle_pro";
+/** Map client/billing quirks to canonical plan codes used for Stripe prices and metadata. */
+function normalizeCheckoutPlanCode(raw: string): "ext_pro" | "desktop_pro" | "bundle_pro" | null {
+  const k = raw.trim().toLowerCase();
+  if (k.includes("chrome") || k === "ext_pro") return "ext_pro";
+  if (k.includes("desktop")) return "desktop_pro";
+  if (k.includes("bundle")) return "bundle_pro";
+  return null;
+}
+
+/** Accept month/monthly and year/annual/yearly from various clients. */
+function normalizeCheckoutInterval(raw: string): "monthly" | "annual" | null {
+  const k = raw.trim().toLowerCase();
+  if (k === "month" || k === "monthly") return "monthly";
+  if (k === "year" || k === "annual" || k === "yearly") return "annual";
+  return null;
 }
 
 function stripeWebhookSecret(): string | null {
@@ -387,24 +396,34 @@ app.post("/v1/telemetry", async (req: Request, res: Response) => {
 });
 
 app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
-  const payload = checkoutSchema.parse(req.body);
-  const { planCode, interval } = payload;
+  const body = checkoutSchema.parse(req.body);
+  const planCode = normalizeCheckoutPlanCode(body.planCode);
+  const interval = normalizeCheckoutInterval(body.interval);
+
+  if (!planCode) {
+    res.status(400).json({ error: `Unknown or unsupported plan: ${body.planCode}` });
+    return;
+  }
+  if (!interval) {
+    res.status(400).json({ error: `Unknown billing interval: ${body.interval}` });
+    return;
+  }
 
   let priceId: string | undefined;
 
-  if (planCode === "chrome" || planCode === "ext_pro") {
+  if (planCode === "ext_pro") {
     priceId =
-      interval === "year" || interval === "annual"
+      interval === "annual"
         ? process.env.STRIPE_PRICE_EXT_PRO_YEARLY || process.env.STRIPE_PRICE_EXT_PRO_ANNUAL
         : process.env.STRIPE_PRICE_EXT_PRO_MONTHLY;
-  } else if (planCode === "desktop" || planCode === "desktop_pro") {
+  } else if (planCode === "desktop_pro") {
     priceId =
-      interval === "year" || interval === "annual"
+      interval === "annual"
         ? process.env.STRIPE_PRICE_DESKTOP_PRO_YEARLY || process.env.STRIPE_PRICE_DESKTOP_PRO_ANNUAL
         : process.env.STRIPE_PRICE_DESKTOP_PRO_MONTHLY;
-  } else if (planCode === "bundle" || planCode === "bundle_pro") {
+  } else if (planCode === "bundle_pro") {
     priceId =
-      interval === "year" || interval === "annual"
+      interval === "annual"
         ? process.env.STRIPE_PRICE_BUNDLE_PRO_YEARLY || process.env.STRIPE_PRICE_BUNDLE_PRO_ANNUAL
         : process.env.STRIPE_PRICE_BUNDLE_PRO_MONTHLY;
   }
@@ -416,17 +435,15 @@ app.post("/v1/billing/create-checkout", async (req: Request, res: Response) => {
     return;
   }
 
-  const metadataPlan = canonicalPlanCodeForStripe(planCode);
-
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
-    client_reference_id: payload.userId,
+    client_reference_id: body.userId,
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: payload.successUrl,
-    cancel_url: payload.cancelUrl,
-    metadata: { plan_code: metadataPlan },
+    success_url: body.successUrl,
+    cancel_url: body.cancelUrl,
+    metadata: { plan_code: planCode },
     subscription_data: {
-      metadata: { plan_code: metadataPlan }
+      metadata: { plan_code: planCode }
     }
   });
   res.json({ checkoutUrl: session.url });

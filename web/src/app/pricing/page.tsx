@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { SITE_URL } from "../../lib/config";
 import styles from "./page.module.css";
 
 type Billing = "month" | "year";
@@ -109,24 +110,42 @@ export default function PricingPage() {
   }, []);
 
   const handleSubscribe = useCallback(
-    async (planCode: PlanCodeApi) => {
+    async (planCode: string) => {
       setFatal(null);
       if (signedIn === false) {
         setFatal("Please sign in on the home page before subscribing.");
         return;
       }
-      setLoading(planCode);
+
+      const normalizedPlan =
+        planCode.toLowerCase().includes("chrome") || planCode.toLowerCase() === "ext_pro"
+          ? "ext_pro"
+          : planCode.toLowerCase().includes("desktop")
+            ? "desktop_pro"
+            : "bundle_pro";
+
+      const intervalApi = billing === "year" ? "annual" : "monthly";
+      const base = SITE_URL.replace(/\/$/, "");
+      const successUrl = `${base}/success?session_id={CHECKOUT_SESSION_ID}`;
+      const cancelUrl = `${base}/pricing`;
+
+      setLoading(normalizedPlan as PlanCodeApi);
       try {
         const res = await fetch("/api/billing/create-checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
-            planCode,
-            interval: billing === "year" ? "annual" : "monthly"
+            planCode: normalizedPlan,
+            interval: intervalApi,
+            successUrl,
+            cancelUrl
           })
         });
+
         const data = (await res.json().catch(() => ({}))) as {
           checkoutUrl?: string | null;
+          url?: string | null;
           error?: string;
           message?: string;
         };
@@ -138,22 +157,31 @@ export default function PricingPage() {
         }
 
         if (!res.ok) {
-          setFatal(
+          const msg =
             typeof data.error === "string"
               ? data.error
-              : "Checkout could not start. Price IDs may not be configured on the server."
-          );
+              : "Checkout could not start. Price IDs may not be configured on the server.";
+          console.error("Checkout error:", data);
+          alert(`Checkout error: ${msg}`);
           return;
         }
 
-        const url = data.checkoutUrl;
-        if (typeof url === "string" && url.startsWith("http")) {
+        const url =
+          (typeof data.url === "string" && data.url.startsWith("http") ? data.url : null) ??
+          (typeof data.checkoutUrl === "string" && data.checkoutUrl.startsWith("http")
+            ? data.checkoutUrl
+            : null);
+
+        if (url) {
           window.location.href = url;
           return;
         }
-        setFatal("Checkout URL missing from server response.");
-      } catch {
-        setFatal("Network error. Check your connection and try again.");
+
+        console.error("Checkout error:", data);
+        alert(`Checkout error: ${data.error ?? "Unknown error from server"}`);
+      } catch (err) {
+        console.error(err);
+        alert("Could not connect to server. Please try again.");
       } finally {
         setLoading(null);
       }
