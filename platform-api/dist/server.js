@@ -498,9 +498,23 @@ app.get("/v1/blocklist/manifest", async (_req, res) => {
         version: release.version,
         artifactUrls: release.artifactUrls,
         sha256: release.sha256,
-        minClientVersion: "1.0.0",
-        signature: process.env.BLOCKLIST_MANIFEST_SIGNATURE || ""
+        minClientVersion: release.minClientVersion,
+        signature: release.signature
     });
+});
+app.get("/v1/blocklist/public-key", (_req, res) => {
+    const publicKeyJwk = process.env.BLOCKLIST_PUBLIC_KEY_JWK;
+    if (!publicKeyJwk) {
+        res.status(503).json({ error: "Public key not configured" });
+        return;
+    }
+    try {
+        const jwk = JSON.parse(publicKeyJwk);
+        res.json({ jwk });
+    }
+    catch {
+        res.status(500).json({ error: "Invalid public key configuration" });
+    }
 });
 app.post("/v1/alerts", async (req, res) => {
     const payload = alertsSchema.parse(req.body);

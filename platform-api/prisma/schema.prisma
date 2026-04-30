@@ -65,13 +65,15 @@ model Entitlement {
 }
 
 model BlocklistRelease {
-  id           String   @id @default(cuid())
-  version      String   @unique
-  changelog    String
-  artifactUrls Json
-  sha256       String
-  deprecated   Boolean  @default(false)
-  publishedAt  DateTime
+  id               String   @id @default(cuid())
+  version          String   @unique
+  changelog        String
+  artifactUrls     Json
+  sha256           String
+  signature        String
+  minClientVersion String   @default("1.0.0")
+  deprecated       Boolean  @default(false)
+  publishedAt      DateTime
 }
 
 model AlertEvent {

@@ -143,10 +143,26 @@ async function init() {
   apiToken.value = state.settings.apiToken || "";
   partnerConsent.checked = Boolean(state.settings.partnerConsent);
   remoteDeltaUrl.value = state.settings.remoteDeltaUrl || "";
+
+  const currentApiBase = state.settings.apiBaseUrl || "";
+  const computedManifestUrl = currentApiBase ? `${currentApiBase}/v1/blocklist/manifest` : "";
   signedManifestUrl.value = state.settings.signedManifestUrl || "";
+  signedManifestUrl.placeholder = computedManifestUrl || "Enter manifest URL or set API Base URL first";
+
   manifestPublicKeyJwk.value = state.settings.manifestPublicKeyJwk || "";
+  if (!manifestPublicKeyJwk.value && currentApiBase) {
+    manifestPublicKeyJwk.placeholder = "Auto-fetched from API on startup";
+  }
+
   telemetryEnabled.checked = Boolean(state.settings.telemetryEnabled);
   renderWhitelist(state.whitelistEntries || []);
+
+  apiBaseUrl.addEventListener("change", () => {
+    const base = apiBaseUrl.value.trim();
+    if (base && !signedManifestUrl.value) {
+      signedManifestUrl.placeholder = `${base}/v1/blocklist/manifest`;
+    }
+  });
 
   requestDisable.addEventListener("click", async () => {
     const ok = await requirePassword();

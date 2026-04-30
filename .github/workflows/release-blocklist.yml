@@ -1,0 +1,88 @@
+name: Release Blocklist
+
+on:
+  push:
+    tags:
+      - 'blocklist-v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Blocklist version (calver format, e.g. 2026.05.01)'
+        required: true
+        type: string
+      changelog:
+        description: 'Changelog message'
+        required: false
+        type: string
+        default: ''
+      dry_run:
+        description: 'Dry run (no upload/DB write)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: platform-api
+        run: npm ci
+
+      - name: Generate Prisma client
+        working-directory: platform-api
+        run: npx prisma generate
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "changelog=${{ inputs.changelog }}" >> $GITHUB_OUTPUT
+            echo "dry_run=${{ inputs.dry_run }}" >> $GITHUB_OUTPUT
+          else
+            # Extract version from tag: blocklist-v2026.05.01 -> 2026.05.01
+            VERSION="${GITHUB_REF_NAME#blocklist-v}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "changelog=Blocklist release $VERSION" >> $GITHUB_OUTPUT
+            echo "dry_run=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish blocklist release
+        working-directory: platform-api
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          BLOCKLIST_SIGNING_KEY: ${{ secrets.BLOCKLIST_SIGNING_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
+        run: |
+          ARGS="--version ${{ steps.version.outputs.version }}"
+          if [ -n "${{ steps.version.outputs.changelog }}" ]; then
+            ARGS="$ARGS --changelog \"${{ steps.version.outputs.changelog }}\""
+          fi
+          if [ "${{ steps.version.outputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          eval node scripts/publish-blocklist-release.mjs $ARGS
+
+      - name: Summary
+        run: |
+          echo "## Blocklist Release" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Dry Run:** ${{ steps.version.outputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.version.outputs.dry_run }}" != "true" ]; then
+            echo "Delta uploaded to: https://blocklist.puresignal.io/deltas/v1/delta-${{ steps.version.outputs.version }}.json" >> $GITHUB_STEP_SUMMARY
+          fi

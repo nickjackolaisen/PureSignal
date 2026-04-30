@@ -9,8 +9,15 @@ const UPDATE_ALARM = "updateBlocklistDelta";
 const WHITELIST_ALARM = "syncWhitelist";
 const DISABLE_COOLDOWN_ALARM = "disableProtectionCooldown";
 
+/**
+ * Default public JWK for blocklist manifest signature verification.
+ * This is the ECDSA P-256 public key that matches the private key used to sign releases.
+ * Replace this with your actual public key JWK after generating the key pair.
+ */
+const DEFAULT_MANIFEST_PUBLIC_KEY_JWK = {"kty":"EC","x":"t-swpDNThYKPoNIHJL71d6AXHuV3J9M-MGF07GfZnQw","y":"gb3CaOPbxqmkvzG-_l_VUrsdj9h81HZR-tL-cUsifq8","crv":"P-256"};
+
 const DEFAULT_SETTINGS = {
-  settingsVersion: 2,
+  settingsVersion: 3,
   planCode: "free",
   featureFlags: {
     partnerRelay: false,
@@ -26,7 +33,7 @@ const DEFAULT_SETTINGS = {
   keywordList: ["porn", "xxx", "hentai", "onlyfans", "adult"],
   remoteDeltaUrl: "",
   signedManifestUrl: "",
-  manifestPublicKeyJwk: "",
+  manifestPublicKeyJwk: DEFAULT_MANIFEST_PUBLIC_KEY_JWK,
   apiBaseUrl: "",
   apiUserId: "",
   apiDeviceId: "",
@@ -65,14 +72,53 @@ async function setSettings(partial) {
 
 async function migrateSettingsIfNeeded() {
   const settings = await getSettings();
-  if ((settings.settingsVersion || 1) >= 2) {
+  const version = settings.settingsVersion || 1;
+
+  if (version < 2) {
+    await setSettings({
+      settingsVersion: 2,
+      planCode: settings.planCode || "free",
+      featureFlags: settings.featureFlags || DEFAULT_SETTINGS.featureFlags
+    });
+  }
+
+  if (version < 3) {
+    await setSettings({
+      settingsVersion: 3,
+      manifestPublicKeyJwk: settings.manifestPublicKeyJwk || DEFAULT_MANIFEST_PUBLIC_KEY_JWK
+    });
+  }
+}
+
+async function bootstrapManifestConfig() {
+  const settings = await getSettings();
+  if (!settings.apiBaseUrl) {
     return;
   }
-  await setSettings({
-    settingsVersion: 2,
-    planCode: settings.planCode || "free",
-    featureFlags: settings.featureFlags || DEFAULT_SETTINGS.featureFlags
-  });
+
+  const updates = {};
+
+  if (!settings.signedManifestUrl) {
+    updates.signedManifestUrl = `${settings.apiBaseUrl}/v1/blocklist/manifest`;
+  }
+
+  if (!settings.manifestPublicKeyJwk || settings.manifestPublicKeyJwk === DEFAULT_MANIFEST_PUBLIC_KEY_JWK) {
+    try {
+      const response = await fetch(`${settings.apiBaseUrl}/v1/blocklist/public-key`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.jwk) {
+          updates.manifestPublicKeyJwk = JSON.stringify(data.jwk);
+        }
+      }
+    } catch {
+      // ignore fetch failures, use hardcoded default
+    }
+  }
+
+  if (Object.keys(updates).length > 0) {
+    await setSettings(updates);
+  }
 }
 
 async function getStats() {
@@ -368,6 +414,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     [STATS_KEY]: DEFAULT_STATS
   });
   await refreshAllRules();
+  await bootstrapManifestConfig();
   await syncEntitlements();
   chrome.alarms.create(UPDATE_ALARM, { periodInMinutes: 24 * 60 });
   chrome.alarms.create(WHITELIST_ALARM, { periodInMinutes: 15 });
@@ -378,6 +425,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.runtime.onStartup.addListener(async () => {
   await migrateSettingsIfNeeded();
   await refreshAllRules();
+  await bootstrapManifestConfig();
   await syncEntitlements();
 });
 
