@@ -601,6 +601,25 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       return;
     }
 
+    if (message?.type === "BOOTSTRAP_MANIFEST") {
+      // Manual bootstrap trigger (for testing): chrome.runtime.sendMessage({ type: "BOOTSTRAP_MANIFEST" })
+      try {
+        await bootstrapManifestConfig();
+        const settings = await getSettings();
+        sendResponse({
+          success: true,
+          signedManifestUrl: settings.signedManifestUrl || "",
+          hasManifestPublicKeyJwk: Boolean(settings.manifestPublicKeyJwk)
+        });
+      } catch (err) {
+        sendResponse({
+          success: false,
+          error: err instanceof Error ? err.message : String(err)
+        });
+      }
+      return;
+    }
+
     sendResponse({ ok: false, error: "Unknown message type" });
   })();
 

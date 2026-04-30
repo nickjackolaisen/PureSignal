@@ -20,3 +20,7 @@ Then reload the extension in `chrome://extensions`. The script rewrites `manifes
 1. Open `chrome://extensions`
 2. Enable **Developer mode**
 3. **Load unpacked** → select this `extension/` directory
+
+### Chrome Web Store / ZIP uploads
+
+Do not include a `_metadata` folder (Chrome creates it when you pack an extension locally). Delete it before zipping, or use the repo’s CI artifact. Packaging with `_metadata` often causes upload or review errors.

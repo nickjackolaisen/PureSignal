@@ -1,5 +1,9 @@
 node_modules
 dist
+
+# Chrome adds this when packing/unpacking; must not ship or upload to Web Store
+extension/_metadata/
+**/_metadata/
 .next
 .env
 .env.*
