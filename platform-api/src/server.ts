@@ -258,6 +258,21 @@ app.get("/health", (_req: Request, res: Response) => {
   res.json({ ok: true, service: "platform-api" });
 });
 
+// Temporary debug route
+app.get("/debug/prices", (_req: Request, res: Response) => {
+  res.json({
+    message: "Price IDs loaded on server",
+    prices: {
+      EXT_PRO_MONTHLY: process.env.STRIPE_PRICE_EXT_PRO_MONTHLY,
+      EXT_PRO_YEARLY: process.env.STRIPE_PRICE_EXT_PRO_YEARLY,
+      DESKTOP_PRO_MONTHLY: process.env.STRIPE_PRICE_DESKTOP_PRO_MONTHLY,
+      DESKTOP_PRO_YEARLY: process.env.STRIPE_PRICE_DESKTOP_PRO_YEARLY,
+      BUNDLE_PRO_MONTHLY: process.env.STRIPE_PRICE_BUNDLE_PRO_MONTHLY,
+      BUNDLE_PRO_YEARLY: process.env.STRIPE_PRICE_BUNDLE_PRO_YEARLY
+    }
+  });
+});
+
 app.get("/v1/status", async (_req: Request, res: Response) => {
   const latestRelease = await prisma.blocklistRelease.findFirst({
     orderBy: { publishedAt: "desc" }
