@@ -139,8 +139,12 @@ function normalizeCheckoutInterval(raw: string): "monthly" | "annual" | null {
 }
 
 function stripeWebhookSecret(): string | null {
-  const value = process.env.STRIPE_WEBHOOK_SECRET?.trim();
-  return value || null;
+  const test = process.env.STRIPE_WEBHOOK_SECRET_TEST?.trim();
+  const live = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  if (stripeIsTestMode()) {
+    return test || live || null;
+  }
+  return live || test || null;
 }
 
 /** Express can expose headers as string | string[] */
@@ -254,7 +258,11 @@ app.post(
     const endpointSecret = stripeWebhookSecret();
     if (!endpointSecret) {
       // eslint-disable-next-line no-console
-      console.error("STRIPE_WEBHOOK_SECRET is not set");
+      console.error(
+        stripeIsTestMode()
+          ? "Stripe webhook: set STRIPE_WEBHOOK_SECRET_TEST or STRIPE_WEBHOOK_SECRET"
+          : "Stripe webhook: set STRIPE_WEBHOOK_SECRET (or STRIPE_WEBHOOK_SECRET_TEST as fallback)"
+      );
       res.status(500).send("Server config error");
       return;
     }
