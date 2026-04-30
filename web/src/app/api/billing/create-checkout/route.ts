@@ -61,7 +61,6 @@ export async function POST(request: Request) {
         body: payload,
         signal: controller.signal
       }),
-      { attempts: 3, pauseMs: 2500 }
     );
   } catch (err) {
     const timedOut = err instanceof Error && err.name === "AbortError";

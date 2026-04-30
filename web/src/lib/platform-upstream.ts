@@ -22,15 +22,16 @@ export function vercelPlatformApiMisconfigMessage(): string | null {
 const RETRY_STATUS = new Set([502, 503, 504]);
 
 /**
- * Retry POST when Render returns gateway errors with empty body (cold start).
+ * Retry when Render (or its edge) returns gateway errors. Render often serves 503 with a
+ * non-empty HTML/plain body while waking; we must not treat that as a final response.
  */
 export async function fetchWithGatewayRetry(
   url: string,
   init: () => RequestInit,
   options: { attempts?: number; pauseMs?: number } = {}
 ): Promise<Response> {
-  const attempts = options.attempts ?? 3;
-  const pauseMs = options.pauseMs ?? 2500;
+  const attempts = options.attempts ?? 5;
+  const pauseMs = options.pauseMs ?? 3500;
   let last: Response | undefined;
 
   for (let i = 0; i < attempts; i++) {
@@ -40,8 +41,10 @@ export async function fetchWithGatewayRetry(
     last = await fetch(url, init());
     if (last.ok) return last;
     if (!RETRY_STATUS.has(last.status)) return last;
-    const text = await last.clone().text();
-    if (text.length > 0) return last;
+    const isLast = i === attempts - 1;
+    if (!isLast) {
+      await last.clone().text().catch(() => {});
+    }
   }
   return last as Response;
 }
