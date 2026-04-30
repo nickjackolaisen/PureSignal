@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap"
+});
 
 export const metadata: Metadata = {
   title: "PureSignal",
@@ -17,11 +25,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${inter.variable} ${inter.className}`}>
         <main>
-          <header>
-            <h1>PureSignal</h1>
-            <p className="muted">Guard your signal. Silence the noise.</p>
+          <header className="siteHeader">
+            <h1 className="brandEyebrow">
+              <Link href="/" className="brandEyebrowLink">
+                PureSignal
+              </Link>
+            </h1>
+            <p className="siteHeaderTagline">Guard your signal. Silence the noise.</p>
             <nav>
               <Link href="/">Home</Link>
               <Link href="/features">Features</Link>
@@ -36,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </header>
           {children}
         </main>
+        <Analytics />
       </body>
     </html>
   );

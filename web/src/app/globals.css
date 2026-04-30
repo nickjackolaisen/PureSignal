@@ -1,6 +1,9 @@
 :root {
   color-scheme: light dark;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --brand-eyebrow: #7dd3fc;
+  --brand-eyebrow-line: #38bdf8;
+  --brand-eyebrow-hover: #bae6fd;
 }
 
 * {
@@ -14,7 +17,7 @@ body {
 }
 
 a {
-  color: #7dd3fc;
+  color: var(--brand-eyebrow);
 }
 
 main {
@@ -23,7 +26,6 @@ main {
   padding: 24px;
 }
 
-header,
 section {
   background: #111827;
   border: 1px solid #334155;
@@ -32,11 +34,43 @@ section {
   margin-bottom: 16px;
 }
 
+header.siteHeader {
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 1rem 18px 1rem;
+  margin-bottom: 16px;
+}
+
 nav {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 8px;
+}
+
+header.siteHeader nav {
+  margin-top: 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(51, 65, 85, 0.65);
+  gap: 10px;
+}
+
+header.siteHeader nav a {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+header.siteHeader nav a:hover {
+  color: var(--brand-eyebrow);
+}
+
+header.siteHeader nav a:focus-visible {
+  outline: 2px solid var(--brand-eyebrow-line);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 label {
@@ -66,4 +100,71 @@ button {
 
 .muted {
   color: #94a3b8;
+}
+
+/* Wordmark: pricing-style label + gradient rule */
+.brandEyebrow {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.25;
+  color: var(--brand-eyebrow);
+}
+
+.brandEyebrow::before {
+  content: "";
+  width: 1.25rem;
+  height: 1px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--brand-eyebrow-line) 100%);
+  opacity: 0.9;
+}
+
+.brandEyebrow--center {
+  justify-content: center;
+}
+
+.brandEyebrowLink {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.brandEyebrowLink:hover {
+  color: var(--brand-eyebrow-hover);
+}
+
+.brandEyebrowLink:focus-visible {
+  outline: 2px solid var(--brand-eyebrow-line);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.siteHeader .brandEyebrow {
+  margin-bottom: 0.35rem;
+}
+
+.siteHeaderTagline {
+  margin: 0 0 12px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #94a3b8;
+  max-width: 22rem;
+}
+
+.successPanel {
+  text-align: center;
+  padding: 3rem 1rem;
+  max-width: 32rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.successPanel .brandEyebrow {
+  margin-bottom: 1rem;
 }

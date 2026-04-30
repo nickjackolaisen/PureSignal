@@ -29,25 +29,6 @@
   margin-bottom: clamp(2rem, 5vw, 3rem);
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #7dd3fc;
-  margin-bottom: 0.75rem;
-}
-
-.eyebrow::before {
-  content: "";
-  width: 1.5rem;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #38bdf8);
-}
-
 .title {
   font-size: clamp(2rem, 5vw, 3.25rem);
   font-weight: 700;

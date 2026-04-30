@@ -218,7 +218,7 @@ export default function PricingPage() {
     <div className={styles.page}>
       <div className={styles.inner}>
         <header className={styles.hero}>
-          <p className={styles.eyebrow}>PureSignal</p>
+          <p className="brandEyebrow">PureSignal</p>
           <h1 className={styles.title}>Guard your signal</h1>
           <p className={styles.subtitle}>
             Silence the noise. Block <strong>12.5 million</strong> adult domains with blocklists built for real coverage

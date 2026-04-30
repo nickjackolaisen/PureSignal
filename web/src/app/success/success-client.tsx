@@ -51,7 +51,10 @@ export function SuccessClient({ sessionId }: { sessionId: string | null }) {
   }, [sessionId]);
 
   return (
-    <section style={{ textAlign: "center", padding: "3rem 1rem", maxWidth: "32rem", margin: "0 auto" }}>
+    <section className="successPanel">
+      <p className="brandEyebrow brandEyebrow--center">
+        PureSignal
+      </p>
       <h2>You&apos;re nearly there</h2>
       {state === "syncing" && (
         <p className="muted">Linking your Stripe payment to your account — one moment…</p>
