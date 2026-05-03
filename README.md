@@ -61,6 +61,7 @@ Used to merge clean lists with the main one. Should be run like this ``sh merger
 | [mrvivacious's list](https://github.com/mrvivacious/PorNo-_Porn_Blocker/tree/master/lists/Urls) |  |
 | [thisisu's list](https://github.com/thisisu/hosts_adultxxx/blob/master/hosts) |  |
 | [zangadoprojets' list](https://github.com/zangadoprojets/pi-hole-blocklist/blob/main/Pornpages.txt) |  |
+| [hagezi' list](https://github.com/hagezi/dns-blocklists/blob/main/dnsmasq/nsfw.txt) |  |
 
 ## Random lists
 - http://controlc.com/99125ac6 (Posted by [/u/lojack_or_nojack](https://teddit.net/r/NoFap/comments/924t6w/an_updated_list_of_porn_sites_to_block_in_your/).)
