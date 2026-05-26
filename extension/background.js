@@ -4,7 +4,16 @@ const WHITELIST_RULE_MAX = 4_000;
 const STATS_KEY = "stats";
 const SETTINGS_KEY = "settings";
 const WHITELIST_KEY = "whitelistEntries";
-const DEFAULT_RULESET_IDS = ["blocklist_core_01", "safebrowsing_redirects"];
+/** All core chunk rulesets + safe-search redirects from manifest (not just blocklist_core_01). */
+function buildDefaultRulesetIds() {
+  const resources = chrome.runtime.getManifest().declarative_net_request?.rule_resources || [];
+  const core = resources.filter((r) => r.id.startsWith("blocklist_core_")).map((r) => r.id);
+  const safe = resources.some((r) => r.id === "safebrowsing_redirects") ? ["safebrowsing_redirects"] : [];
+  return [...core, ...safe];
+}
+
+const DEFAULT_RULESET_IDS = buildDefaultRulesetIds();
+const DEFAULT_API_BASE_URL = "https://api.puresignal.io";
 const UPDATE_ALARM = "updateBlocklistDelta";
 const WHITELIST_ALARM = "syncWhitelist";
 const DISABLE_COOLDOWN_ALARM = "disableProtectionCooldown";
@@ -14,10 +23,10 @@ const DISABLE_COOLDOWN_ALARM = "disableProtectionCooldown";
  * This is the ECDSA P-256 public key that matches the private key used to sign releases.
  * Replace this with your actual public key JWK after generating the key pair.
  */
-const DEFAULT_MANIFEST_PUBLIC_KEY_JWK = {"kty":"EC","x":"t-swpDNThYKPoNIHJL71d6AXHuV3J9M-MGF07GfZnQw","y":"gb3CaOPbxqmkvzG-_l_VUrsdj9h81HZR-tL-cUsifq8","crv":"P-256"};
+const DEFAULT_MANIFEST_PUBLIC_KEY_JWK = {"kty":"EC","x":"iN00rK-pGF5l58HfdEZs8NcIRMTlF0aVWYuyAUvq-o0","y":"Wm5wRUitr_XREF4NMKo6EH_aAfMBEBfEv3SxW2DHMjc","crv":"P-256"};
 
 const DEFAULT_SETTINGS = {
-  settingsVersion: 3,
+  settingsVersion: 4,
   planCode: "free",
   featureFlags: {
     partnerRelay: false,
@@ -34,7 +43,7 @@ const DEFAULT_SETTINGS = {
   remoteDeltaUrl: "",
   signedManifestUrl: "",
   manifestPublicKeyJwk: DEFAULT_MANIFEST_PUBLIC_KEY_JWK,
-  apiBaseUrl: "",
+  apiBaseUrl: DEFAULT_API_BASE_URL,
   apiUserId: "",
   apiDeviceId: "",
   apiToken: "",
@@ -86,6 +95,20 @@ async function migrateSettingsIfNeeded() {
     await setSettings({
       settingsVersion: 3,
       manifestPublicKeyJwk: settings.manifestPublicKeyJwk || DEFAULT_MANIFEST_PUBLIC_KEY_JWK
+    });
+  }
+
+  if (version < 4) {
+    const current = await getSettings();
+    const manifestCore = buildDefaultRulesetIds().filter(
+      (id) => id.startsWith("blocklist_core_") || id === "safebrowsing_redirects"
+    );
+    const enabled = new Set(current.enabledRulesets || []);
+    manifestCore.forEach((id) => enabled.add(id));
+    await setSettings({
+      settingsVersion: 4,
+      enabledRulesets: [...enabled],
+      apiBaseUrl: current.apiBaseUrl || DEFAULT_API_BASE_URL
     });
   }
 }
@@ -408,18 +431,37 @@ async function applyDeltaDomains(domains) {
   });
 }
 
-chrome.runtime.onInstalled.addListener(async () => {
-  await chrome.storage.local.set({
-    [SETTINGS_KEY]: DEFAULT_SETTINGS,
-    [STATS_KEY]: DEFAULT_STATS
-  });
+chrome.runtime.onInstalled.addListener(async (details) => {
+  const reason = details.reason;
+
+  if (reason === "install") {
+    // First install: seed defaults only if storage is empty
+    const stored = await chrome.storage.local.get([SETTINGS_KEY, STATS_KEY]);
+    if (!stored[SETTINGS_KEY]) {
+      await chrome.storage.local.set({ [SETTINGS_KEY]: DEFAULT_SETTINGS });
+    }
+    if (!stored[STATS_KEY]) {
+      await chrome.storage.local.set({ [STATS_KEY]: DEFAULT_STATS });
+    }
+    // Open onboarding only on first install
+    chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") });
+  } else if (reason === "update") {
+    // Extension update: migrate settings, preserve user data
+    await migrateSettingsIfNeeded();
+  }
+
+  // Common to both install and update
   await refreshAllRules();
   await bootstrapManifestConfig();
   await syncEntitlements();
+
+  // Create alarms idempotently (clear first to avoid duplicates)
+  await chrome.alarms.clear(UPDATE_ALARM);
+  await chrome.alarms.clear(WHITELIST_ALARM);
+  await chrome.alarms.clear(DISABLE_COOLDOWN_ALARM);
   chrome.alarms.create(UPDATE_ALARM, { periodInMinutes: 24 * 60 });
   chrome.alarms.create(WHITELIST_ALARM, { periodInMinutes: 15 });
   chrome.alarms.create(DISABLE_COOLDOWN_ALARM, { periodInMinutes: 1 });
-  chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") });
 });
 
 chrome.runtime.onStartup.addListener(async () => {
@@ -500,7 +542,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 });
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   (async () => {
     if (message?.type === "GET_STATE") {
       const settings = await getSettings();

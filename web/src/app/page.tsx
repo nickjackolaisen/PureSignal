@@ -30,6 +30,25 @@ export default async function HomePage({
         </ul>
       </section>
       <section>
+        <h3>Get the Chrome extension</h3>
+        <p>
+          Install PureSignal from the Chrome Web Store, then sign in on this site and paste your User ID from the
+          dashboard into extension settings.
+        </p>
+        {process.env.NEXT_PUBLIC_CHROME_STORE_URL ? (
+          <p>
+            <a href={process.env.NEXT_PUBLIC_CHROME_STORE_URL} rel="noopener noreferrer">
+              Install from Chrome Web Store
+            </a>
+          </p>
+        ) : (
+          <p className="muted">
+            Chrome Web Store link will appear here after listing approval. Set{" "}
+            <code>NEXT_PUBLIC_CHROME_STORE_URL</code> on Vercel.
+          </p>
+        )}
+      </section>
+      <section>
         <h3>Account login</h3>
         <LoginForm loginRequired={params.loginRequired === "1"} />
       </section>

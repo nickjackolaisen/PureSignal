@@ -64,6 +64,7 @@ export async function GET() {
     user: { email: session.email, userId, provider: session.provider },
     entitlements,
     platformStatus,
+    apiBaseUrl: API_BASE_URL,
     ...(notice ? { notice } : {})
   });
 }

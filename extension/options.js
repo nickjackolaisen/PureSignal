@@ -84,6 +84,11 @@ async function requirePassword() {
   return verifyPassword(input);
 }
 
+function getCoreRulesetIds() {
+  const resources = chrome.runtime.getManifest().declarative_net_request?.rule_resources || [];
+  return resources.filter((r) => r.id.startsWith("blocklist_core_")).map((r) => r.id);
+}
+
 async function init() {
   const keywordBlockingEnabled = document.getElementById("keywordBlockingEnabled");
   const planStatus = document.getElementById("planStatus");
@@ -127,7 +132,9 @@ async function init() {
   partnerProHint.textContent = state.settings.featureFlags?.partnerRelay
     ? "Partner relay is enabled for your plan."
     : "Partner relay requires Pro.";
-  rulesetCore.checked = (state.settings.enabledRulesets || []).includes("blocklist_core_01");
+  rulesetCore.checked = getCoreRulesetIds().every((id) =>
+    (state.settings.enabledRulesets || []).includes(id)
+  );
   rulesetSafe.checked = (state.settings.enabledRulesets || []).includes("safebrowsing_redirects");
   protectionEnabled.checked = Boolean(state.settings.protectionEnabled);
   if (state.settings.protectionDisableUnlockAt > Date.now()) {
@@ -137,7 +144,7 @@ async function init() {
   }
   keywordList.value = (state.settings.keywordList || []).join(", ");
   partnerLabel.value = state.settings.partnerLabel || "";
-  apiBaseUrl.value = state.settings.apiBaseUrl || "";
+  apiBaseUrl.value = state.settings.apiBaseUrl || "https://api.puresignal.io";
   apiUserId.value = state.settings.apiUserId || "";
   apiDeviceId.value = state.settings.apiDeviceId || "";
   apiToken.value = state.settings.apiToken || "";
@@ -269,7 +276,7 @@ async function init() {
       protectionEnabled: protectionEnabled.checked,
       keywordBlockingEnabled: keywordBlockingEnabled.checked,
       enabledRulesets: [
-        ...(rulesetCore.checked ? ["blocklist_core_01"] : []),
+        ...(rulesetCore.checked ? getCoreRulesetIds() : []),
         ...(rulesetSafe.checked ? ["safebrowsing_redirects"] : [])
       ],
       keywordList: keywordList.value

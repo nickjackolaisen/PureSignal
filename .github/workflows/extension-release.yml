@@ -18,6 +18,7 @@ jobs:
         run: |
           CG_MAX_RULES=100000 CG_CHUNK_SIZE=30000 node extension/scripts/generate-core-rules.mjs
           node extension/scripts/generate-safebrowsing-rules.mjs
+          node extension/scripts/generate-icons.mjs
       - name: Pack extension ZIP
         run: |
           cd extension
