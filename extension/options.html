@@ -15,6 +15,19 @@
       </section>
 
       <section class="card">
+        <h2>Account &amp; subscription</h2>
+        <p class="muted">
+          Copy your User ID from
+          <a href="https://puresignal.io/dashboard" target="_blank" rel="noopener noreferrer">puresignal.io/dashboard</a>,
+          paste it here, then click Save settings at the bottom.
+        </p>
+        <label for="apiBaseUrl">Platform API base URL</label>
+        <input id="apiBaseUrl" type="text" placeholder="https://api.puresignal.io" />
+        <label for="apiUserId">User ID</label>
+        <input id="apiUserId" type="text" placeholder="user_123" />
+      </section>
+
+      <section class="card">
         <h2>Blocking</h2>
         <label><input id="rulesetCore" type="checkbox" /> Enable core blocklist (all bundled domain chunks)</label>
         <label><input id="rulesetSafe" type="checkbox" /> Enable safe-search redirect ruleset</label>
@@ -59,10 +72,6 @@
         <h2>Accountability Partner</h2>
         <label for="partnerLabel">Partner label</label>
         <input id="partnerLabel" type="text" placeholder="Coach, spouse, mentor" />
-        <label for="apiBaseUrl">Platform API base URL</label>
-        <input id="apiBaseUrl" type="text" placeholder="https://api.puresignal.io" />
-        <label for="apiUserId">User ID</label>
-        <input id="apiUserId" type="text" placeholder="user_123" />
         <label for="apiDeviceId">Device ID</label>
         <input id="apiDeviceId" type="text" placeholder="device_123" />
         <label for="apiToken">API token</label>

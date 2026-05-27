@@ -168,8 +168,13 @@ async function applyEnabledRulesets() {
     }
     return;
   }
+  const allRulesets = (await chrome.runtime.getManifest()).declarative_net_request?.rule_resources || [];
+  const allRulesetIds = allRulesets.map((rule) => rule.id);
+  const enableRulesetIds = settings.enabledRulesets || [];
+  const disableRulesetIds = allRulesetIds.filter((id) => !enableRulesetIds.includes(id));
   await chrome.declarativeNetRequest.updateEnabledRulesets({
-    enableRulesetIds: settings.enabledRulesets
+    enableRulesetIds,
+    disableRulesetIds
   });
 }
 

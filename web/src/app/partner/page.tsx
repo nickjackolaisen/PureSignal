@@ -1,6 +1,15 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { PartnerSettings } from "../../components/partner-settings";
+import { SESSION_COOKIE_NAME } from "../../lib/config";
+import { parseSessionToken } from "../../lib/session";
 
-export default function PartnerPage() {
+export default async function PartnerPage() {
+  const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+  if (!parseSessionToken(sessionToken)) {
+    redirect("/?loginRequired=1");
+  }
+
   return (
     <>
       <section>

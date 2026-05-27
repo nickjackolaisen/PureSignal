@@ -10,6 +10,7 @@ const hostsFiles = ["hosts00", "hosts01", "hosts02", "hosts03", "hosts04", "host
   path.join(repoRoot, name)
 );
 const upstreamWhitelistPath = path.join(repoRoot, "whitelist");
+const priorityDomainsPath = path.join(extensionDir, "data", "priority-domains.txt");
 
 const maxRules = Number(process.env.CG_MAX_RULES || 100000);
 const chunkSize = Number(process.env.CG_CHUNK_SIZE || 30000);
@@ -50,9 +51,34 @@ async function loadWhitelist() {
   return blocked;
 }
 
+async function loadPriorityDomains(skipSet) {
+  const domains = [];
+  if (!fs.existsSync(priorityDomainsPath)) {
+    return domains;
+  }
+  const lines = fs.readFileSync(priorityDomainsPath, "utf8").split(/\r?\n/);
+  for (const line of lines) {
+    const domain = normalizeDomain(line);
+    if (!domain || skipSet.has(domain)) {
+      continue;
+    }
+    if (!domains.includes(domain)) {
+      domains.push(domain);
+    }
+  }
+  return domains;
+}
+
 async function collectDomains() {
   const skipSet = await loadWhitelist();
   const domains = new Set();
+
+  for (const priorityDomain of await loadPriorityDomains(skipSet)) {
+    if (domains.size >= maxRules) {
+      break;
+    }
+    domains.add(priorityDomain);
+  }
 
   for (const filePath of hostsFiles) {
     if (!fs.existsSync(filePath)) {

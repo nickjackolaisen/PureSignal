@@ -1,7 +1,16 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { DeviceList } from "../../components/device-list";
 import { DashboardClient } from "../../components/dashboard-client";
+import { SESSION_COOKIE_NAME } from "../../lib/config";
+import { parseSessionToken } from "../../lib/session";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+  if (!parseSessionToken(sessionToken)) {
+    redirect("/?loginRequired=1");
+  }
+
   return (
     <>
       <section>
